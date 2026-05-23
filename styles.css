@@ -1,0 +1,2023 @@
+:root {
+  color: #222222;
+  font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+  background: #e4dfd6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.topbar {
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin: 0 auto 20px;
+  max-width: 1440px;
+}
+
+.topbar h1,
+.section-heading h2 {
+  margin: 0;
+}
+
+.topbar h1 {
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.eyebrow {
+  color: #6c665d;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+
+.workspace {
+  align-items: start;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 280px minmax(420px, 1fr);
+  margin: 0 auto;
+  max-width: 1440px;
+}
+
+.control-panel,
+.preview-panel {
+  background:
+    linear-gradient(rgba(255, 253, 246, 0.92), rgba(255, 253, 246, 0.92)),
+    url("./assets/figma/paper-pattern.png") center / 420px auto;
+  border: 1px solid rgba(32, 117, 104, 0.14);
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(31, 51, 48, 0.08);
+}
+
+.control-panel {
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+  position: sticky;
+  top: 18px;
+}
+
+.preview-panel {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.panel-section {
+  border-bottom: 1px solid #eadfce;
+  padding-bottom: 18px;
+}
+
+.panel-section:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.section-heading {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-heading h2 {
+  font-size: 18px;
+}
+
+.topbar-actions,
+.export-actions,
+.template-picker,
+.control-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.control-stack {
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.header-image-control {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.header-image-control .ghost-button {
+  justify-content: center;
+  width: 100%;
+}
+
+input,
+textarea {
+  background: #ffffff;
+  border: 1px solid #d7cbbb;
+  border-radius: 6px;
+  color: #222222;
+  min-width: 0;
+  padding: 10px 11px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #2f6d7e;
+  box-shadow: 0 0 0 3px rgba(47, 109, 126, 0.16);
+  outline: none;
+}
+
+.primary-button,
+.ghost-button,
+.danger-button,
+.export-actions button,
+.template-button {
+  border-radius: 6px;
+  font-weight: 700;
+  min-height: 38px;
+  padding: 9px 12px;
+}
+
+.primary-button {
+  background: #2f6d7e;
+  color: #ffffff;
+}
+
+.ghost-button,
+.export-actions button {
+  background: #efe8da;
+  color: #2d2923;
+}
+
+.danger-button {
+  background: #7f2f37;
+  color: #ffffff;
+}
+
+.template-button {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #d7cbbb;
+  color: #28231e;
+  display: flex;
+  gap: 8px;
+}
+
+.template-button.active {
+  border-color: #2f6d7e;
+  box-shadow: 0 0 0 3px rgba(47, 109, 126, 0.16);
+}
+
+.swatch {
+  border-radius: 50%;
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+}
+
+.status-text {
+  color: #6c665d;
+  font-size: 13px;
+  margin: 12px 0 0;
+  min-height: 20px;
+}
+
+.preview-stage {
+  background:
+    radial-gradient(circle at 24% 10%, rgba(219, 238, 242, 0.34), transparent 28%),
+    linear-gradient(135deg, #e4dfd6, #d8d2c8);
+  overflow: auto;
+  padding: 22px;
+}
+
+.itinerary-sheet {
+  border-radius: 8px;
+  box-shadow: 0 20px 50px rgba(32, 25, 18, 0.22);
+  margin: 0 auto;
+  min-height: 920px;
+  overflow: hidden;
+  padding: 34px;
+  width: min(100%, 760px);
+}
+
+.hero-polaroid,
+.sheet-add-item-button,
+.note-polaroid {
+  display: none;
+}
+
+.sheet-meta-panel {
+  display: block;
+}
+
+.note-frame {
+  display: block;
+}
+
+.sheet-hero {
+  border-bottom: 2px solid currentColor;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+}
+
+.sheet-date-line {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 145px 1fr;
+  margin-bottom: 12px;
+}
+
+.sheet-date-input,
+.sheet-area-input,
+.sheet-title-input,
+.sheet-input,
+.time-range-button,
+.item-title-input,
+.item-line-input,
+.item-note-input,
+.sheet-textarea {
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: inherit;
+  padding: 6px 8px;
+  width: 100%;
+}
+
+.sheet-date-input,
+.sheet-area-input,
+.sheet-input,
+.item-line-input,
+.item-note-input {
+  font-size: 12px;
+}
+
+.sheet-title-input {
+  background: transparent;
+  border-color: transparent;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.24;
+  margin: 0 0 12px;
+  min-height: 82px;
+  overflow: hidden;
+  padding: 0;
+  resize: vertical;
+}
+
+.sheet-title-input:focus,
+.sheet-date-input:focus,
+.sheet-area-input:focus,
+.sheet-input:focus,
+.item-title-input:focus,
+.item-line-input:focus,
+.item-note-input:focus,
+.sheet-textarea:focus {
+  background: #ffffff;
+  border-color: #2f6d7e;
+  box-shadow: 0 0 0 3px rgba(47, 109, 126, 0.16);
+}
+
+.sheet-meta {
+  display: grid;
+  gap: 7px;
+  grid-template-columns: 1fr;
+}
+
+.meta-row {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 72px 1fr auto;
+}
+
+.meta-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.meta-add-row button,
+.meta-hide-button {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.meta-add-row button {
+  border-radius: 999px;
+  min-height: 28px;
+  padding: 4px 10px;
+}
+
+.meta-hide-button {
+  border-radius: 50%;
+  height: 24px;
+  padding: 0;
+  width: 24px;
+}
+
+.meta-label,
+.item-time,
+.sheet-section h3 {
+  font-weight: 800;
+}
+
+.meta-label {
+  font-size: 12px;
+  opacity: 0.76;
+}
+
+.sheet-section {
+  margin-top: 22px;
+}
+
+.sheet-section h3 {
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+
+.sheet-timeline {
+  display: grid;
+  gap: 0;
+}
+
+.sheet-item {
+  display: grid;
+  column-gap: 12px;
+  grid-template-columns: 18px minmax(0, 1fr);
+  min-height: 104px;
+  position: relative;
+}
+
+.sheet-item.time-overlap {
+  color: #8a2530;
+}
+
+.sheet-item.time-overlap .rail-dot {
+  background: #c73646;
+}
+
+.sheet-item.time-overlap .item-card {
+  background: rgba(199, 54, 70, 0.07) !important;
+  border-radius: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.sheet-item.dragging {
+  opacity: 0.48;
+}
+
+.sheet-item.drop-before::after,
+.sheet-item.drop-after::after {
+  background: #2f6d7e;
+  border-radius: 999px;
+  content: "";
+  height: 4px;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+.sheet-item.drop-before::after {
+  top: -4px;
+}
+
+.sheet-item.drop-after::after {
+  bottom: -4px;
+}
+
+.sheet-item::before {
+  border-left: 3px dotted currentColor;
+  content: "";
+  height: 100%;
+  left: 7px;
+  opacity: 0.34;
+  position: absolute;
+  top: 24px;
+}
+
+.sheet-item:last-child::before {
+  display: none;
+}
+
+.rail-dot {
+  background: currentColor;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.78);
+  height: 14px;
+  margin-left: 1px;
+  margin-top: 18px;
+  width: 14px;
+  z-index: 1;
+}
+
+.item-time {
+  display: grid;
+  font-size: 13px;
+  gap: 6px;
+  line-height: 1.35;
+  position: relative;
+}
+
+.time-range-button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: inherit;
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 800;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 1.3;
+  min-height: 31px;
+  padding: 2px 4px;
+  width: 100%;
+}
+
+.time-range-button:focus {
+  background: #ffffff;
+  border-color: #2f6d7e;
+  box-shadow: 0 0 0 3px rgba(47, 109, 126, 0.16);
+  outline: none;
+}
+
+.time-popover {
+  background: #ffffff;
+  border: 1px solid #d7cbbb;
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(45, 37, 27, 0.16);
+  display: grid;
+  gap: 8px;
+  left: 22px;
+  padding: 10px;
+  position: absolute;
+  top: 44px;
+  width: 152px;
+  z-index: 5;
+}
+
+.time-popover[hidden] {
+  display: none;
+}
+
+.time-popover label {
+  display: grid;
+  gap: 4px;
+}
+
+.time-popover span {
+  font-size: 10px;
+  font-weight: 800;
+  opacity: 0.58;
+}
+
+.time-popover input {
+  font-size: 13px;
+  padding: 7px 8px;
+}
+
+.item-card {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0;
+  padding: 13px 0 20px;
+  position: relative;
+}
+
+.item-card-head {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 132px auto auto minmax(0, 1fr) auto auto;
+  margin-bottom: 7px;
+}
+
+.item-icon-button {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 8px;
+  color: inherit;
+  display: inline-flex;
+  height: 34px;
+  justify-content: center;
+  padding: 0;
+  width: 34px;
+}
+
+.travel-icon {
+  background-image: url("./assets/figma/item-icon-1.svg");
+  background-repeat: no-repeat;
+  background-size: 400% 300%;
+  background-color: rgba(255, 253, 246, 0.78);
+  background-origin: content-box;
+  border-radius: 5px;
+  display: inline-block;
+  height: 18px;
+  padding: 1px;
+  width: 18px;
+}
+
+.item-icon-button .travel-icon {
+  height: 28px;
+  width: 28px;
+}
+
+.icon-popover .travel-icon {
+  height: 46px;
+  width: 46px;
+}
+
+.travel-icon-train { background-position: 0% 0%; }
+.travel-icon-bus { background-position: 33.333% 0%; }
+.travel-icon-walk { background-position: 66.666% 0%; }
+.travel-icon-food { background-position: 100% 0%; }
+.travel-icon-camera { background-position: 0% 50%; }
+.travel-icon-pin,
+.travel-icon-meet { background-position: 33.333% 50%; }
+.travel-icon-hotel { background-position: 66.666% 50%; }
+.travel-icon-tree { background-position: 100% 50%; }
+.travel-icon-car { background-position: 0% 100%; }
+.travel-icon-cafe { background-position: 33.333% 100%; }
+.travel-icon-ticket { background-position: 66.666% 100%; }
+.travel-icon-auto { background-position: 100% 100%; }
+.travel-icon-star { background-position: 100% 100%; }
+
+.icon-popover {
+  background: #ffffff;
+  border: 1px solid #d7cbbb;
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(45, 37, 27, 0.16);
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  left: 146px;
+  padding: 8px;
+  position: absolute;
+  top: 50px;
+  width: 210px;
+  z-index: 6;
+}
+
+.icon-popover[hidden] {
+  display: none;
+}
+
+.icon-popover button {
+  align-items: center;
+  background: #fffaf2;
+  border: 1px solid #eadfce;
+  border-radius: 7px;
+  color: inherit;
+  display: grid;
+  gap: 3px;
+  justify-items: center;
+  min-height: 86px;
+  padding: 6px;
+}
+
+.icon-popover button.active {
+  border-color: #207568;
+  box-shadow: 0 0 0 2px rgba(32, 117, 104, 0.14);
+}
+
+.icon-popover span {
+  font-size: 10px;
+  font-weight: 800;
+  opacity: 0.62;
+}
+
+.drag-handle {
+  cursor: grab;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+  opacity: 0.45;
+  padding-top: 2px;
+  user-select: none;
+}
+
+.duration-pill {
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  justify-content: center;
+  padding: 4px 8px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.overlap-alert {
+  background: rgba(199, 54, 70, 0.12);
+  border: 1px solid rgba(199, 54, 70, 0.3);
+  border-radius: 999px;
+  color: #8a2530;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 800;
+  margin-top: 7px;
+  padding: 3px 8px;
+}
+
+.item-tools {
+  display: flex;
+  gap: 4px;
+}
+
+.item-tools button {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 5px;
+  color: inherit;
+  display: inline-flex;
+  font-size: 13px;
+  height: 25px;
+  justify-content: center;
+  padding: 0;
+  width: 25px;
+}
+
+.item-title-input {
+  background: transparent;
+  border-color: transparent;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.3;
+  padding: 0;
+}
+
+.item-dots {
+  border-bottom: 4px dotted currentColor;
+  margin-left: 140px;
+  opacity: 0.84;
+  width: min(calc(100% - 140px), 340px);
+}
+
+.detail-add-menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: 140px;
+  margin-top: 8px;
+}
+
+.detail-add-menu[hidden] {
+  display: none;
+}
+
+.detail-add-menu button {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 999px;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  min-height: 28px;
+  padding: 4px 10px;
+}
+
+.detail-empty {
+  font-size: 12px;
+  opacity: 0.55;
+}
+
+.item-details-inline {
+  display: grid;
+  gap: 4px;
+  margin-left: 140px;
+  margin-top: 7px;
+}
+
+.inline-detail-row {
+  align-items: center;
+  display: grid;
+  gap: 6px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.inline-detail-row button {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 50%;
+  color: inherit;
+  display: inline-flex;
+  font-weight: 800;
+  height: 22px;
+  justify-content: center;
+  padding: 0;
+  width: 22px;
+}
+
+.item-details-inline:empty {
+  display: none;
+}
+
+.inline-detail-input {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: inherit;
+  font-size: 13px;
+  line-height: 1.45;
+  min-height: 28px;
+  padding: 3px 6px;
+  width: 100%;
+}
+
+.inline-detail-input:focus {
+  background: #ffffff;
+  border-color: #2f6d7e;
+  box-shadow: 0 0 0 3px rgba(47, 109, 126, 0.16);
+  outline: none;
+}
+
+.inline-detail-memo {
+  resize: vertical;
+}
+
+.note-box {
+  border-radius: 7px;
+  font-size: 13px;
+  line-height: 1.65;
+  min-height: 54px;
+  padding: 12px;
+  white-space: pre-wrap;
+}
+
+.sheet-textarea {
+  display: block;
+  resize: vertical;
+}
+
+.empty-state {
+  border: 1px dashed currentColor;
+  border-radius: 7px;
+  opacity: 0.75;
+  padding: 18px;
+  text-align: center;
+}
+
+.template-school {
+  background: #fffdf6;
+  color: #2a2823;
+}
+
+.template-school .item-card,
+.template-school .note-box {
+  background: #f4ebd8;
+  border: 1px solid #d6c7af;
+}
+
+.template-pop {
+  background: #fff7fb;
+  color: #2d2738;
+}
+
+.template-pop .sheet-hero {
+  border-color: #e8558c;
+}
+
+.template-pop .item-card,
+.template-pop .note-box {
+  background: #e8f6ff;
+  border: 1px solid #91c9e8;
+}
+
+.template-chic {
+  background: #f8f7f2;
+  color: #252525;
+}
+
+.template-chic .sheet-hero {
+  border-color: #76614f;
+}
+
+.template-chic .item-card,
+.template-chic .note-box {
+  background: #ffffff;
+  border: 1px solid #c9c2b8;
+}
+
+.template-travel {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(219, 238, 242, 0.28), transparent 24%),
+    radial-gradient(circle at 88% 92%, rgba(221, 199, 125, 0.16), transparent 28%),
+    linear-gradient(rgba(255, 253, 246, 0.86), rgba(255, 253, 246, 0.86)),
+    url("./assets/figma/paper-pattern.png") center / 420px auto,
+    linear-gradient(90deg, #fffdf6, #fffdf6);
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(31, 51, 48, 0.2);
+  color: #1f3330;
+  min-height: 1546px;
+  padding: 32px 24px 24px;
+  position: relative;
+  width: min(100%, 900px);
+}
+
+.template-travel::before,
+.template-travel::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+.template-travel::before {
+  background: rgba(236, 126, 125, 0.28);
+  box-shadow: 0 2px 8px rgba(77, 49, 34, 0.12);
+  height: 28px;
+  right: 36px;
+  top: 18px;
+  transform: rotate(8deg);
+  width: 92px;
+}
+
+.template-travel::after {
+  border: 2px solid rgba(32, 117, 104, 0.24);
+  border-radius: 50%;
+  bottom: 34px;
+  height: 84px;
+  right: 34px;
+  transform: rotate(-12deg);
+  width: 84px;
+}
+
+.template-travel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.template-travel .sheet-hero {
+  background:
+    linear-gradient(90deg, rgba(219, 238, 242, 0.86), rgba(219, 238, 242, 0.44)),
+    url("./assets/figma/hero-landscape.png") center / cover;
+  border: 1px solid rgba(32, 117, 104, 0.13);
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(32, 117, 104, 0.07);
+  min-height: 230px;
+  margin: 0 0 28px;
+  overflow: hidden;
+  padding: 40px 32px 28px;
+  position: relative;
+}
+
+.template-travel .sheet-hero::before,
+.template-travel .sheet-hero::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+}
+
+.template-travel .sheet-hero::before {
+  background: rgba(236, 126, 125, 0.36);
+  box-shadow: 0 2px 8px rgba(77, 49, 34, 0.12);
+  border-radius: 6px;
+  height: 23px;
+  left: 72px;
+  top: 14px;
+  transform: rotate(2deg);
+  width: 90px;
+}
+
+.template-travel .sheet-hero::after {
+  background: rgba(221, 199, 125, 0.55);
+  border-radius: 6px;
+  height: 21px;
+  right: 58px;
+  top: 30px;
+  width: 112px;
+}
+
+.template-travel .sheet-date-line {
+  display: flex;
+  gap: 8px;
+  grid-template-columns: none;
+  margin-bottom: 4px;
+  max-width: 540px;
+}
+
+.template-travel .sheet-date-input,
+.template-travel .sheet-area-input {
+  background: transparent;
+  border-color: transparent;
+  color: rgba(31, 51, 48, 0.82);
+  font-size: 16px;
+  font-weight: 700;
+  height: 28px;
+  padding: 2px 0;
+}
+
+.template-travel .sheet-date-input {
+  flex: 0 0 158px;
+}
+
+.template-travel .sheet-area-input {
+  flex: 1 1 auto;
+}
+
+.template-travel .sheet-title-input {
+  color: #1f3330;
+  font-family: Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 50px;
+  font-weight: 800;
+  line-height: 1.25;
+  min-height: 74px;
+  text-shadow: none;
+}
+
+.template-travel .meta-add-row {
+  border-top: 2px solid rgba(32, 117, 104, 0.82);
+  margin: 26px 0 18px;
+  padding-top: 24px;
+}
+
+.template-travel .sheet-meta {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 24px;
+}
+
+.template-travel .meta-row {
+  align-items: start;
+  gap: 10px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.template-travel .meta-label {
+  font-family: Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 14px;
+  opacity: 1;
+  white-space: nowrap;
+}
+
+.template-travel .sheet-input {
+  background: transparent;
+  border-color: transparent;
+  color: #5f7060;
+  font-size: 14px;
+  padding: 0;
+}
+
+.template-travel .sheet-section {
+  margin-top: 28px;
+}
+
+.template-travel .sheet-section h3 {
+  font-family: Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 26px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.template-travel .sheet-section h3::before {
+  display: none;
+}
+
+.template-travel .sheet-timeline {
+  gap: 0;
+}
+
+.template-travel .sheet-item {
+  column-gap: 12px;
+  grid-template-columns: 36px minmax(0, 1fr);
+  min-height: 180px;
+}
+
+.template-travel .sheet-item::before {
+  border-left: 2px dotted #207568;
+  left: 17px;
+  opacity: 0.65;
+  top: 50px;
+}
+
+.template-travel .rail-dot {
+  background: #207568;
+  box-shadow: none;
+  height: 16px;
+  margin-left: 10px;
+  margin-top: 28px;
+  width: 16px;
+}
+
+.template-travel .item-card {
+  background:
+    linear-gradient(rgba(255, 249, 232, 0.97), rgba(255, 249, 232, 0.97)),
+    url("./assets/figma/paper-pattern.png") center / 360px auto !important;
+  border: 1px solid rgba(32, 117, 104, 0.22) !important;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(31, 51, 48, 0.06);
+  margin-bottom: 16px;
+  min-height: 164px;
+  padding: 1px;
+}
+
+.template-travel .item-card::before {
+  background: rgba(99, 169, 181, 0.38);
+  border-radius: 3px;
+  content: "";
+  height: 14px;
+  left: 24px;
+  position: absolute;
+  top: -8px;
+  transform: rotate(3deg);
+  width: 66px;
+}
+
+.template-travel .item-card-head {
+  gap: 8px;
+  grid-template-columns: 204px 44px auto minmax(0, 1fr) auto auto;
+  min-height: 70px;
+  margin: 0;
+  padding: 14px 12px 0;
+}
+
+.template-travel .item-time {
+  align-self: center;
+}
+
+.template-travel .time-range-button {
+  background: rgba(255, 249, 232, 0.8);
+  border-color: rgba(32, 117, 104, 0.25);
+  border-radius: 10px;
+  font-size: 15px;
+  min-height: 30px;
+  padding: 2px 8px;
+}
+
+.template-travel .item-icon-button {
+  background: rgba(255, 249, 232, 0.97);
+  border-color: rgba(32, 117, 104, 0.27);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(32, 117, 104, 0.13);
+  height: 44px;
+  width: 44px;
+}
+
+.template-travel .item-icon-button .travel-icon {
+  height: 30px;
+  width: 30px;
+}
+
+.template-travel .drag-handle {
+  align-self: center;
+  color: #5f7060;
+  font-size: 17px;
+  opacity: 0.48;
+}
+
+.template-travel .item-title-input {
+  align-self: center;
+  color: #1f3330;
+  font-family: Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.template-travel .duration-pill {
+  align-self: center;
+  background: rgba(99, 169, 181, 0.38);
+  border: 0;
+  border-radius: 999px;
+  color: #1f3330;
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  min-width: 38px;
+  padding: 3px 8px;
+}
+
+.template-travel .item-tools {
+  align-self: center;
+}
+
+.template-travel .item-tools button {
+  background: rgba(255, 249, 232, 0.78);
+  border-color: rgba(32, 117, 104, 0.18);
+  border-radius: 6px;
+}
+
+.template-travel .item-dots {
+  border-bottom: 3px dotted rgba(32, 117, 104, 0.54);
+  margin: 0 12px;
+  width: calc(100% - 24px);
+}
+
+.template-travel .item-details-inline {
+  display: grid;
+  gap: 12px 16px;
+  grid-template-columns: repeat(2, minmax(0, 240px));
+  margin: 12px 12px 0;
+}
+
+.template-travel .inline-detail-row {
+  align-items: end;
+}
+
+.template-travel .inline-detail-row::before {
+  color: #5f7060;
+  content: attr(data-label);
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  grid-column: 1 / -1;
+  line-height: 1;
+  margin-bottom: -4px;
+}
+
+.template-travel .inline-detail-input {
+  color: #1f3330;
+  font-size: 13px;
+  min-height: 24px;
+  padding: 2px 0;
+}
+
+.template-travel .detail-add-menu {
+  gap: 6px;
+  margin: 8px 12px 0;
+}
+
+.template-travel .detail-add-menu button {
+  background: rgba(32, 117, 104, 0.06);
+  border-color: rgba(32, 117, 104, 0.31);
+  border-style: dashed;
+  color: #207568;
+  min-height: 27px;
+}
+
+.template-travel .time-popover {
+  left: 0;
+  top: 38px;
+}
+
+.template-travel .icon-popover {
+  left: 226px;
+  top: 62px;
+}
+
+.template-travel .note-box {
+  background:
+    linear-gradient(rgba(255, 249, 232, 0.97), rgba(255, 249, 232, 0.97)),
+    url("./assets/figma/paper-pattern.png") center / 360px auto;
+  border: 1px solid rgba(214, 166, 66, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(31, 51, 48, 0.06);
+  min-height: 150px;
+  padding: 20px 24px;
+}
+
+.template-travel .sheet-timeline .sheet-item:nth-child(4n + 1) .rail-dot {
+  background: #207568;
+}
+
+.template-travel .sheet-timeline .sheet-item:nth-child(4n + 2) .rail-dot {
+  background: #ec7e7d;
+}
+
+.template-travel .sheet-timeline .sheet-item:nth-child(4n + 3) .rail-dot {
+  background: #d6a642;
+}
+
+.template-travel .sheet-timeline .sheet-item:nth-child(4n) .rail-dot {
+  background: #5f8f7b;
+}
+
+.template-travel .sheet-hero {
+  background:
+    linear-gradient(90deg, rgba(219, 238, 242, 0.9) 0%, rgba(219, 238, 242, 0.62) 56%, rgba(219, 238, 242, 0.36) 100%),
+    url("./assets/figma/hero-landscape.png") center / cover;
+}
+
+.template-travel .sheet-date-line {
+  max-width: 560px;
+  position: relative;
+  z-index: 2;
+}
+
+.template-travel .sheet-date-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+.template-travel .sheet-title-input {
+  max-width: 560px;
+  position: relative;
+  z-index: 2;
+}
+
+.template-travel .hero-polaroid {
+  background: #ffffff;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 149px;
+  padding: 7px;
+  position: absolute;
+  right: 122px;
+  top: 94px;
+  transform: rotate(4deg);
+  width: 134px;
+  z-index: 1;
+}
+
+.template-travel .hero-polaroid-photo {
+  background: url("./assets/figma/hero-landscape.png") 18% 38% / 620px auto;
+  display: block;
+  height: 96px;
+  width: 100%;
+}
+
+.template-travel .hero-polaroid-caption {
+  color: #5f7060;
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 9px;
+  line-height: 1.5;
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.template-travel .sheet-meta-panel {
+  display: block;
+}
+
+.template-travel .meta-add-row {
+  margin: 0 0 18px;
+}
+
+.template-travel .meta-add-row:empty {
+  margin-bottom: 0;
+  min-height: 0;
+}
+
+.template-travel .time-range-button {
+  font-family: Consolas, monospace;
+  font-size: 14px;
+}
+
+.template-travel .item-details-inline {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 760px;
+}
+
+.template-travel .sheet-add-item-button {
+  background: rgba(32, 117, 104, 0.04);
+  border: 1px dashed rgba(32, 117, 104, 0.34);
+  border-radius: 14px;
+  color: #207568;
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 800;
+  margin-left: 60px;
+  min-height: 38px;
+  padding: 8px 16px;
+}
+
+.template-travel .note-frame {
+  display: block;
+  position: relative;
+}
+
+.template-travel .note-frame .note-box {
+  padding-right: 180px;
+}
+
+.template-travel .note-polaroid {
+  background: #ffffff;
+  bottom: -10px;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.18);
+  display: grid;
+  height: 132px;
+  padding: 7px;
+  place-items: end center;
+  position: absolute;
+  right: 18px;
+  transform: rotate(-5deg);
+  width: 116px;
+}
+
+.template-travel .note-polaroid::before {
+  background: url("./assets/figma/hero-landscape.png") 24% 46% / 520px auto;
+  content: "";
+  height: 84px;
+  left: 7px;
+  position: absolute;
+  right: 7px;
+  top: 7px;
+}
+
+.template-travel .note-polaroid span {
+  color: #5f7060;
+  font-family: Georgia, serif;
+  font-size: 9px;
+  position: relative;
+}
+
+.template-travel .memo-section.is-empty {
+  display: none;
+}
+
+.template-travel .time-overlap .item-card {
+  background:
+    linear-gradient(rgba(255, 244, 241, 0.97), rgba(255, 244, 241, 0.97)),
+    url("./assets/figma/paper-pattern.png") center / 360px auto !important;
+  border-color: rgba(199, 54, 70, 0.34) !important;
+}
+
+.template-travel {
+  background:
+    url("./assets/figma/paper-pattern.png") 0 0 / 900px 2000px no-repeat,
+    radial-gradient(circle at 108px 124px, rgba(219, 238, 242, 0.18), rgba(110, 119, 121, 0.09) 28%, transparent 55%),
+    radial-gradient(circle at 792px 1423px, rgba(221, 199, 125, 0.12), rgba(111, 100, 63, 0.06) 25%, transparent 50%),
+    #fffdf6 !important;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  height: 1546.5px;
+  min-height: 1546.5px;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  width: 900px;
+}
+
+.template-travel::before,
+.template-travel::after {
+  display: none;
+}
+
+.template-travel .sheet-hero {
+  background: rgba(219, 238, 242, 0.82) !important;
+  border: 1px solid rgba(32, 117, 104, 0.13);
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(32, 117, 104, 0.07);
+  height: 230px;
+  left: 24px;
+  margin: 0;
+  min-height: 230px;
+  overflow: hidden;
+  padding: 40px 32px;
+  position: absolute;
+  top: 32px;
+  width: 852px;
+}
+
+.template-travel .sheet-hero::before {
+  background: rgba(236, 126, 125, 0.4);
+  border-radius: 6px;
+  box-shadow: none;
+  display: block;
+  height: 23px;
+  left: 72px;
+  top: 14px;
+  transform: rotate(2deg);
+  width: 90px;
+}
+
+.template-travel .sheet-hero::after {
+  background: rgba(221, 199, 125, 0.55);
+  border-radius: 6px;
+  display: block;
+  height: 21px;
+  right: 58px;
+  top: 30px;
+  width: 112px;
+}
+
+.template-travel .sheet-hero > * {
+  position: relative;
+  z-index: 2;
+}
+
+.template-travel .sheet-hero .sheet-date-line::before {
+  background: var(--hero-image, url("./assets/figma/hero-landscape.png")) center / cover no-repeat;
+  content: "";
+  height: 228px;
+  left: -32px;
+  opacity: 0.35;
+  pointer-events: none;
+  position: absolute;
+  top: -40px;
+  width: 850px;
+  z-index: -1;
+}
+
+.template-travel .sheet-date-line {
+  display: flex;
+  height: 24px;
+  margin: 0 0 4px;
+  max-width: 520px;
+}
+
+.template-travel .sheet-date-input,
+.template-travel .sheet-area-input {
+  background: transparent;
+  border: 0;
+  color: rgba(31, 51, 48, 0.75);
+  font-size: 16px;
+  font-weight: 700;
+  height: 24px;
+  line-height: 24px;
+  padding: 0;
+}
+
+.template-travel .sheet-title-input {
+  background: transparent;
+  border: 0;
+  color: #1f3330;
+  font-family: Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 50px;
+  font-weight: 800;
+  height: 64px;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 64px;
+  overflow: hidden;
+  padding: 0;
+  resize: none;
+  width: 520px;
+}
+
+.template-travel .hero-polaroid {
+  display: none;
+}
+
+.template-travel .hero-polaroid-photo {
+  background: none;
+  height: 96px;
+  width: 100%;
+}
+
+.template-travel .sheet-meta-panel {
+  border-top: 2px solid rgba(32, 117, 104, 0.5);
+  left: 24px;
+  padding-top: 20px;
+  position: absolute;
+  top: 290px;
+  width: 852px;
+}
+
+.template-travel .meta-add-row {
+  border: 0;
+  margin: 29px 0 0;
+  padding: 0;
+}
+
+.template-travel .sheet-meta {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, 276px);
+  margin: 0;
+}
+
+.template-travel .meta-row {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.template-travel .meta-label {
+  color: #1f3330;
+  font-family: Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 21px;
+}
+
+.template-travel .sheet-input {
+  background: transparent;
+  border: 0;
+  color: #5f7060;
+  font-size: 14px;
+  height: 21px;
+  line-height: 21px;
+  padding: 0;
+}
+
+.template-travel .sheet-section {
+  margin: 0;
+  position: absolute;
+}
+
+.template-travel .sheet-section:nth-of-type(1) {
+  left: 24px;
+  top: 391.5px;
+  width: 852px;
+}
+
+.template-travel .sheet-section:nth-of-type(2) {
+  background: rgba(255, 249, 232, 0.97);
+  border: 1px solid rgba(214, 166, 66, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(31, 51, 48, 0.06);
+  height: 210px;
+  left: 24px;
+  padding: 20px 24px;
+  top: 1258.5px;
+  width: 852px;
+}
+
+.template-travel .memo-section {
+  display: none;
+}
+
+.template-travel .sheet-section h3 {
+  color: #1f3330;
+  font-family: Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 39px;
+  margin: 0 0 32px;
+}
+
+.template-travel .sheet-section:nth-of-type(2) h3 {
+  font-size: 24px;
+  line-height: 32px;
+  margin-bottom: 12px;
+}
+
+.template-travel .sheet-timeline {
+  display: grid;
+  gap: 0;
+}
+
+.template-travel .sheet-item {
+  column-gap: 12px;
+  display: grid;
+  grid-template-columns: 36px 804px;
+  min-height: 180.375px;
+  position: relative;
+}
+
+.template-travel .sheet-item.no-details {
+  min-height: 104px;
+}
+
+.template-travel .sheet-item.no-details.add-menu-open {
+  min-height: 132px;
+}
+
+.template-travel .sheet-item::before {
+  border-left: 2px dotted var(--item-accent, #207568);
+  left: 17px;
+  opacity: 0.65;
+  top: 50px;
+}
+
+.template-travel .rail-dot {
+  background: var(--item-accent, #207568);
+  border: 0;
+  box-shadow: none;
+  cursor: pointer;
+  height: 16px;
+  margin-left: 10px;
+  margin-top: 28px;
+  padding: 0;
+  width: 16px;
+}
+
+.template-travel .rail-dot:hover {
+  box-shadow: 0 0 0 6px rgba(32, 117, 104, 0.12);
+}
+
+.template-travel .item-card {
+  background: rgba(255, 249, 232, 0.97) !important;
+  border: 1px solid color-mix(in srgb, var(--item-accent, #207568) 28%, transparent) !important;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(31, 51, 48, 0.06);
+  height: 164.375px;
+  margin: 0;
+  min-height: 164.375px;
+  padding: 1px;
+}
+
+.template-travel .sheet-item.no-details .item-card {
+  height: 84px;
+  min-height: 84px;
+}
+
+.template-travel .sheet-item.no-details.add-menu-open .item-card {
+  height: 116px;
+  min-height: 116px;
+}
+
+.template-travel .item-card::before {
+  background: color-mix(in srgb, var(--item-accent, #63a9b5) 38%, transparent);
+  border-radius: 3px;
+  height: 14px;
+  left: 24px;
+  top: -8px;
+  transform: rotate(3deg);
+  width: 66px;
+}
+
+.template-travel .item-card-head {
+  display: grid;
+  grid-template-columns: 204px 44px auto minmax(0, 1fr) 38px auto;
+  height: 70px;
+  margin: 0;
+  padding: 14px 12px 0;
+}
+
+.template-travel .time-range-button {
+  background: transparent;
+  border: 0;
+  color: transparent;
+  font-size: 0;
+  height: 29px;
+  padding: 0;
+  position: relative;
+}
+
+.template-travel .time-range-button::before,
+.template-travel .time-range-button::after {
+  align-items: center;
+  background: rgba(255, 249, 232, 0.8);
+  border: 1px solid rgba(32, 117, 104, 0.25);
+  border-radius: 10px;
+  color: #1f3330;
+  display: inline-flex;
+  font: 800 13px Consolas, monospace;
+  height: 28.594px;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  width: 82px;
+}
+
+.template-travel .time-range-button::before {
+  content: attr(data-start);
+  left: 0;
+}
+
+.template-travel .time-range-button::after {
+  content: attr(data-end);
+  left: 110px;
+}
+
+.template-travel .item-icon-button {
+  background: rgba(255, 249, 232, 0.97);
+  border: 1px solid color-mix(in srgb, var(--item-accent, #207568) 36%, transparent);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--item-accent, #207568) 18%, transparent);
+  color: var(--item-accent, #207568);
+  height: 44px;
+  width: 44px;
+}
+
+.figma-item-icon {
+  align-items: center;
+  display: block;
+  height: 22px;
+  justify-content: center;
+  width: 22px;
+}
+
+.figma-item-icon svg {
+  display: block;
+  fill: none;
+  height: 100%;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  width: 100%;
+}
+
+.icon-popover .figma-item-icon {
+  color: #207568;
+  height: 22px;
+  width: 22px;
+}
+
+.template-travel .item-title-input {
+  font-family: Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 17px;
+  height: 24px;
+  line-height: 23.375px;
+}
+
+.template-travel .duration-pill {
+  background: color-mix(in srgb, var(--item-accent, #63a9b5) 34%, transparent);
+  border: 0;
+  border-radius: 999px;
+  font: 800 10px Consolas, monospace;
+  height: 19px;
+  min-width: 38px;
+  padding: 2px 8px;
+}
+
+.template-travel .item-dots {
+  border-bottom: 3px dotted color-mix(in srgb, var(--item-accent, #207568) 42%, transparent);
+  margin: 0 12px;
+  width: 778px;
+}
+
+.template-travel .item-details-inline {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, 240px);
+  margin: 12px 12px 0;
+}
+
+.template-travel .sheet-item.no-details .item-details-inline,
+.template-travel .sheet-item.no-details .item-dots {
+  display: none;
+}
+
+.template-travel .detail-add-menu {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin: 8px 12px 0;
+}
+
+.template-travel .detail-add-menu[hidden] {
+  display: none;
+}
+
+.template-travel .detail-add-menu button {
+  align-items: center;
+  background: color-mix(in srgb, var(--item-accent, #207568) 8%, #fffdf6);
+  border: 1px dashed color-mix(in srgb, var(--item-accent, #207568) 42%, transparent);
+  border-radius: 999px;
+  box-shadow: none;
+  color: var(--item-accent, #207568);
+  display: inline-flex;
+  font: 800 11px "Noto Sans JP", sans-serif;
+  height: 26px;
+  justify-content: center;
+  min-height: 26px;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.template-travel .detail-add-menu button:hover {
+  background: color-mix(in srgb, var(--item-accent, #207568) 14%, #fffdf6);
+}
+
+.template-travel .icon-popover {
+  background: rgba(255, 253, 246, 0.98);
+  border: 1px solid rgba(32, 117, 104, 0.22);
+  border-radius: 18px;
+  box-shadow: 0 18px 36px rgba(31, 51, 48, 0.18);
+  display: block;
+  left: 268px;
+  padding: 14px 16px 16px;
+  top: 60px;
+  width: 218px;
+}
+
+.template-travel .icon-popover[hidden] {
+  display: none;
+}
+
+.template-travel .icon-popover-title {
+  color: #5f7060;
+  font: 700 11px "Noto Sans JP", sans-serif;
+  margin: 0 0 12px;
+}
+
+.template-travel .icon-choice-grid {
+  display: grid;
+  gap: 12px 18px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.template-travel .icon-popover button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  color: #207568;
+  display: grid;
+  gap: 4px;
+  height: 42px;
+  justify-items: center;
+  padding: 0;
+}
+
+.template-travel .icon-popover button.active,
+.template-travel .icon-popover button:hover {
+  background: rgba(32, 117, 104, 0.09);
+}
+
+.template-travel .icon-popover button span:not(.figma-item-icon) {
+  color: #5f7060;
+  font: 700 9px "Noto Sans JP", sans-serif;
+  line-height: 1;
+}
+
+.template-travel .color-popover {
+  background: rgba(255, 253, 246, 0.98);
+  border: 1px solid rgba(32, 117, 104, 0.18);
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(31, 51, 48, 0.16);
+  display: flex;
+  gap: 8px;
+  left: 28px;
+  padding: 8px;
+  position: absolute;
+  top: 16px;
+  z-index: 12;
+}
+
+.template-travel .color-popover[hidden] {
+  display: none;
+}
+
+.template-travel .color-popover button {
+  background: var(--choice-color);
+  border: 2px solid #fffdf6;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(31, 51, 48, 0.12);
+  height: 22px;
+  padding: 0;
+  width: 22px;
+}
+
+.template-travel .color-popover button.active {
+  box-shadow: 0 0 0 2px #1f3330;
+}
+
+.template-travel .sheet-add-item-button {
+  background: transparent;
+  border: 1px dashed rgba(32, 117, 104, 0.33);
+  border-radius: 14px;
+  color: #207568;
+  display: inline-flex;
+  font: 800 14px "Noto Sans JP", sans-serif;
+  height: 38px;
+  margin-left: 36px;
+  margin-top: 4px;
+  padding: 8px 16px;
+}
+
+.template-travel .note-frame {
+  display: block;
+  position: static;
+}
+
+.template-travel .note-box {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: #1f3330;
+  font-size: 14px;
+  height: 124px;
+  min-height: 124px;
+  padding: 4px;
+}
+
+.template-travel .note-polaroid {
+  display: none;
+}
+
+.template-travel .note-polaroid::before {
+  background: none;
+  height: 96px;
+  left: 7px;
+  right: 7px;
+  top: 7.25px;
+}
+
+@media (max-width: 980px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .control-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 14px;
+  }
+
+  .topbar,
+  .section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .preview-stage {
+    padding: 12px;
+  }
+
+  .itinerary-sheet {
+    min-height: 760px;
+    padding: 24px;
+    width: 100%;
+  }
+
+  .sheet-item {
+    grid-template-columns: 18px minmax(0, 1fr);
+  }
+
+  .item-card-head {
+    grid-template-columns: 112px auto auto minmax(0, 1fr) auto auto;
+  }
+
+  .item-dots {
+    margin-left: 120px;
+    width: min(calc(100% - 120px), 280px);
+  }
+
+  .detail-add-menu,
+  .item-details-inline {
+    margin-left: 120px;
+  }
+
+  .sheet-date-line {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet-title-input {
+    font-size: 25px;
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  body.printing .app-shell > .topbar,
+  body.printing .control-panel {
+    display: none;
+  }
+
+  body.printing .app-shell,
+  body.printing .workspace,
+  body.printing .preview-panel,
+  body.printing .preview-stage {
+    background: #ffffff;
+    display: block;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+  }
+
+  body.printing .preview-panel {
+    border: 0;
+    box-shadow: none;
+  }
+
+  body.printing .itinerary-sheet {
+    box-shadow: none;
+    margin: 0 auto;
+    min-height: 100vh;
+    width: 760px;
+  }
+
+  body.printing input,
+  body.printing textarea {
+    border-color: transparent;
+    box-shadow: none;
+  }
+}

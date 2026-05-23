@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&#49;&#26085;&#12398;&#12375;&#12362;&#12426;&#12513;&#12540;&#12459;&#12540;</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+      <symbol id="icon-auto" viewBox="0 0 24 24">
+        <path d="M12 3l2.2 5.2 5.6.5-4.2 3.7 1.3 5.5L12 15l-4.9 2.9 1.3-5.5-4.2-3.7 5.6-.5L12 3z" />
+      </symbol>
+      <symbol id="icon-meet" viewBox="0 0 24 24">
+        <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
+        <path d="M4.5 21a7.5 7.5 0 0 1 15 0z" />
+      </symbol>
+      <symbol id="icon-walk" viewBox="0 0 24 24">
+        <path d="M14 4.2a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
+        <path d="M10.5 7l3.2 1.4 1.8 3.2" />
+        <path d="M12.8 9.2L10.7 13l-4 2" />
+        <path d="M11 13l2.8 2.6 1.4 4.4" />
+        <path d="M9.7 14.2L8 20" />
+      </symbol>
+      <symbol id="icon-train" viewBox="0 0 24 24">
+        <rect x="5" y="3" width="14" height="15" rx="3" />
+        <path d="M8 7h8M8 11h8" />
+        <circle cx="9" cy="15" r="1.2" />
+        <circle cx="15" cy="15" r="1.2" />
+        <path d="M8 21l2-3M16 21l-2-3" />
+      </symbol>
+      <symbol id="icon-bus" viewBox="0 0 24 24">
+        <rect x="4" y="5" width="16" height="12" rx="2" />
+        <path d="M7 8h10M7 12h10" />
+        <circle cx="8" cy="17" r="1.4" />
+        <circle cx="16" cy="17" r="1.4" />
+      </symbol>
+      <symbol id="icon-car" viewBox="0 0 24 24">
+        <path d="M5 12l2-5h10l2 5" />
+        <rect x="4" y="11" width="16" height="6" rx="2" />
+        <circle cx="8" cy="17" r="1.4" />
+        <circle cx="16" cy="17" r="1.4" />
+      </symbol>
+      <symbol id="icon-food" viewBox="0 0 24 24">
+        <path d="M7 3v8M10 3v8M5 3v6a4 4 0 0 0 4 4v8" />
+        <path d="M17 3v18" />
+        <path d="M17 3c2.2 1.4 3.2 3.2 3.2 5.4S19.2 12 17 12" />
+      </symbol>
+      <symbol id="icon-camera" viewBox="0 0 24 24">
+        <rect x="4" y="7" width="16" height="12" rx="2" />
+        <path d="M9 7l1.2-2h3.6L15 7" />
+        <circle cx="12" cy="13" r="3" />
+      </symbol>
+      <symbol id="icon-pin" viewBox="0 0 24 24">
+        <path d="M12 21s6-5.4 6-11a6 6 0 0 0-12 0c0 5.6 6 11 6 11z" />
+        <circle cx="12" cy="10" r="2" />
+      </symbol>
+      <symbol id="icon-cafe" viewBox="0 0 24 24">
+        <path d="M5 8h11v5a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5z" />
+        <path d="M16 10h2a2.5 2.5 0 0 1 0 5h-2" />
+        <path d="M7 21h9" />
+      </symbol>
+      <symbol id="icon-hotel" viewBox="0 0 24 24">
+        <path d="M4 20V5h8v15" />
+        <path d="M12 10h8v10" />
+        <path d="M7 8h2M7 12h2M15 14h2" />
+        <path d="M3 20h18" />
+      </symbol>
+    </svg>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Holiday Itinerary Builder</p>
+          <h1>&#49;&#26085;&#12398;&#12375;&#12362;&#12426;&#12513;&#12540;&#12459;&#12540;</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="ghost-button" id="sampleButton" type="button">&#12469;&#12531;&#12503;&#12523;</button>
+          <button class="danger-button" id="clearButton" type="button">&#21021;&#26399;&#21270;</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="control-panel" aria-label="controls">
+          <section class="panel-section">
+            <div class="section-heading">
+              <h2>&#12487;&#12470;&#12452;&#12531;</h2>
+            </div>
+            <div class="template-picker" id="templatePicker"></div>
+            <div class="header-image-control">
+              <input id="headerImageInput" type="file" accept="image/*" hidden />
+              <button class="ghost-button" id="headerImageButton" type="button">Header画像を変更</button>
+              <button class="ghost-button" id="headerImageResetButton" type="button">Header画像を戻す</button>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <h2>&#25805;&#20316;</h2>
+            </div>
+            <div class="control-stack">
+              <button class="primary-button" id="addItemButton" type="button">&#20104;&#23450;&#12434;&#36861;&#21152;</button>
+              <button class="ghost-button" id="sortButton" type="button">&#26178;&#21051;&#38918;&#12395;&#20006;&#12409;&#26367;&#12360;</button>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <h2>&#20986;&#21147;</h2>
+            </div>
+            <div class="export-actions">
+              <button id="pngButton" type="button">PNG</button>
+              <button id="jpegButton" type="button">JPEG</button>
+              <button id="pdfButton" type="button">PDF</button>
+              <button id="icsButton" type="button">ICS</button>
+            </div>
+            <p class="status-text" id="statusText"></p>
+          </section>
+        </aside>
+
+        <section class="preview-panel" aria-label="editable itinerary">
+          <div class="preview-stage">
+            <article class="itinerary-sheet template-school" id="itinerarySheet"></article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./figma-assets-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
