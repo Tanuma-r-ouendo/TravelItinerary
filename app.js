@@ -975,7 +975,7 @@ async function drawTravelPageBackground(ctx, width, height) {
   ctx.fillStyle = "#fffdf6";
   ctx.fillRect(0, 0, width, height);
   try {
-    const paper = await loadImage("./assets/figma/paper-pattern.png");
+    const paper = await loadImage("./assets/figma/paper-pattern.svg");
     const pattern = ctx.createPattern(paper, "repeat");
     ctx.globalAlpha = 0.2;
     ctx.fillStyle = pattern;
