@@ -264,8 +264,8 @@ function normalizeItem(item) {
     timeMenuOpen: Boolean(item.timeMenuOpen),
     iconMenuOpen: Boolean(item.iconMenuOpen),
     colorMenuOpen: Boolean(item.colorMenuOpen),
-    icon: item.icon || "auto",
-    accent: item.accent || "",
+    icon: iconAtlas[item.icon] ? item.icon : "auto",
+    accent: itemAccentColors.includes(item.accent) ? item.accent : "",
     detailVisible: {
       place: Boolean(existingVisibility.place ?? item.place),
       transport: Boolean(existingVisibility.transport ?? item.transport),
@@ -276,8 +276,13 @@ function normalizeItem(item) {
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  showStatus(ja.saved);
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    showStatus(ja.saved);
+  } catch (error) {
+    console.error("saveState failed", error);
+    showStatus("\u4fdd\u5b58\u5bb9\u91cf\u3092\u8d85\u3048\u307e\u3057\u305f\uff08\u753b\u50cf\u30b5\u30a4\u30ba\u3092\u898b\u76f4\u3057\u3066\u304f\u3060\u3055\u3044\uff09");
+  }
 }
 
 function clampNumber(value, min, max, fallback) {
@@ -296,7 +301,12 @@ function loadSavedSchedules() {
 }
 
 function writeSavedSchedules(schedules) {
-  localStorage.setItem(SAVED_SCHEDULES_KEY, JSON.stringify(schedules));
+  try {
+    localStorage.setItem(SAVED_SCHEDULES_KEY, JSON.stringify(schedules));
+  } catch (error) {
+    console.error("writeSavedSchedules failed", error);
+    showStatus("\u4fdd\u5b58\u5bb9\u91cf\u3092\u8d85\u3048\u307e\u3057\u305f\uff08\u753b\u50cf\u30b5\u30a4\u30ba\u3092\u898b\u76f4\u3057\u3066\u304f\u3060\u3055\u3044\uff09");
+  }
 }
 
 function normalizeSchedule(schedule) {
@@ -1291,7 +1301,7 @@ async function drawTravelCanvasNote(ctx, title, body, x, y, w, h, scale) {
   ctx.font = `800 ${24 * scale}px Georgia, serif`;
   ctx.fillText(title, x + 24 * scale, y + 46 * scale);
   ctx.font = `400 ${14 * scale}px sans-serif`;
-  const lines = body.split("\n").map((line) => `繝ｻ${line}`).join("\n");
+  const lines = body.split("\n").map((line) => `\u30fb${line}`).join("\n");
   drawWrappedText(ctx, lines, x + 24 * scale, y + 82 * scale, w - 48 * scale, 28 * scale);
   return y + h;
 }
@@ -1823,7 +1833,11 @@ headerImageInput.addEventListener("change", async () => {
     state.headerImageY = clampNumber(headerImageY?.value, 0, 100, 50);
     state.headerImageOpacity = clampNumber(headerImageOpacity?.value, 0, 100, 35);
     state.headerHeight = clampNumber(headerHeight?.value, 160, 360, 230);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      console.error("header adjust save failed", error);
+    }
     applyHeaderImage();
   });
 });
