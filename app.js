@@ -125,6 +125,7 @@ const headerImageResetButton = document.querySelector("#headerImageResetButton")
 const headerImageScale = document.querySelector("#headerImageScale");
 const headerImageX = document.querySelector("#headerImageX");
 const headerImageY = document.querySelector("#headerImageY");
+const headerImageOpacity = document.querySelector("#headerImageOpacity");
 const packingVisibleToggle = document.querySelector("#packingVisibleToggle");
 const scheduleSaveName = document.querySelector("#scheduleSaveName");
 const saveScheduleButton = document.querySelector("#saveScheduleButton");
@@ -173,6 +174,7 @@ function createBlankState() {
     headerImageScale: 100,
     headerImageX: 50,
     headerImageY: 50,
+    headerImageOpacity: 35,
     participants: "",
     meeting: "",
     dismissal: "",
@@ -198,6 +200,7 @@ function createSampleState() {
     headerImageScale: 100,
     headerImageX: 50,
     headerImageY: 50,
+    headerImageOpacity: 35,
     participants: ja.sampleParticipants,
     meeting: ja.stationEast,
     dismissal: ja.station,
@@ -229,6 +232,7 @@ function loadState() {
     parsed.headerImageScale = clampNumber(parsed.headerImageScale, 60, 180, 100);
     parsed.headerImageX = clampNumber(parsed.headerImageX, 0, 100, 50);
     parsed.headerImageY = clampNumber(parsed.headerImageY, 0, 100, 50);
+    parsed.headerImageOpacity = clampNumber(parsed.headerImageOpacity, 0, 100, 35);
     parsed.packingVisible = parsed.packingVisible !== false;
     parsed.items = parsed.items.map(normalizeItem);
     parsed.metaVisible = normalizeMetaVisibility(parsed);
@@ -297,6 +301,7 @@ function normalizeSchedule(schedule) {
   normalized.headerImageScale = clampNumber(normalized.headerImageScale, 60, 180, 100);
   normalized.headerImageX = clampNumber(normalized.headerImageX, 0, 100, 50);
   normalized.headerImageY = clampNumber(normalized.headerImageY, 0, 100, 50);
+  normalized.headerImageOpacity = clampNumber(normalized.headerImageOpacity, 0, 100, 35);
   normalized.packingVisible = normalized.packingVisible !== false;
   normalized.items = Array.isArray(normalized.items) ? normalized.items.map(normalizeItem) : createBlankState().items;
   normalized.metaVisible = normalizeMetaVisibility(normalized);
@@ -308,6 +313,7 @@ function syncPanelControls() {
   if (headerImageScale) headerImageScale.value = clampNumber(state.headerImageScale, 60, 180, 100);
   if (headerImageX) headerImageX.value = clampNumber(state.headerImageX, 0, 100, 50);
   if (headerImageY) headerImageY.value = clampNumber(state.headerImageY, 0, 100, 50);
+  if (headerImageOpacity) headerImageOpacity.value = clampNumber(state.headerImageOpacity, 0, 100, 35);
   renderSavedScheduleOptions();
 }
 
@@ -446,6 +452,7 @@ function applyHeaderImage() {
     hero.style.removeProperty("--hero-size");
     hero.style.removeProperty("--hero-position");
   }
+  hero.style.setProperty("--hero-opacity", String(clampNumber(state.headerImageOpacity, 0, 100, 35) / 100));
 }
 
 function renderMetaInput(label, field, value) {
@@ -728,14 +735,11 @@ function getItem(id) {
 }
 
 function hasTimeOverlap(item) {
-  const start = timeToMinutes(item.start);
-  const end = timeToMinutes(item.end);
-  if (end <= start) return true;
+  const range = itemTimeRange(item);
   return state.items.some((other) => {
     if (other.id === item.id) return false;
-    const otherStart = timeToMinutes(other.start);
-    const otherEnd = timeToMinutes(other.end);
-    return start < otherEnd && end > otherStart;
+    const otherRange = alignRangeToRange(itemTimeRange(other), range);
+    return range.start < otherRange.end && range.end > otherRange.start;
   });
 }
 
@@ -816,16 +820,17 @@ function recalcForwardFrom(index) {
 }
 
 function itemDuration(item) {
-  return Math.max(1, timeToMinutes(item.end) - timeToMinutes(item.start));
+  const range = itemTimeRange(item);
+  return Math.max(1, range.end - range.start);
 }
 
 function latestEndTime(items) {
-  const latest = items.reduce((max, item) => Math.max(max, timeToMinutes(item.end)), -1);
+  const latest = items.reduce((max, item) => Math.max(max, itemTimeRange(item).end), -1);
   return latest >= 0 ? minutesToTime(latest) : "";
 }
 
 function formatDuration(start, end) {
-  const diff = Math.max(0, timeToMinutes(end) - timeToMinutes(start));
+  const diff = Math.max(0, timeRangeMinutes(start, end).end - timeRangeMinutes(start, end).start);
   const hours = Math.floor(diff / 60);
   const minutes = diff % 60;
   return `${hours}:${String(minutes).padStart(2, "0")}`;
@@ -838,6 +843,26 @@ function addMinutesToTime(time, minutes) {
 function timeToMinutes(time) {
   const [hours, minutes] = String(time || "00:00").split(":").map(Number);
   return (Number.isFinite(hours) ? hours : 0) * 60 + (Number.isFinite(minutes) ? minutes : 0);
+}
+
+function timeRangeMinutes(start, end) {
+  const startMinutes = timeToMinutes(start);
+  let endMinutes = timeToMinutes(end);
+  if (endMinutes <= startMinutes) endMinutes += 1440;
+  return { start: startMinutes, end: endMinutes };
+}
+
+function itemTimeRange(item) {
+  return timeRangeMinutes(item.start, item.end);
+}
+
+function alignRangeToRange(range, baseRange) {
+  const candidates = [-1440, 0, 1440].map((offset) => ({ start: range.start + offset, end: range.end + offset }));
+  return candidates.reduce((best, current) => {
+    const bestDistance = Math.abs(best.start - baseRange.start);
+    const currentDistance = Math.abs(current.start - baseRange.start);
+    return currentDistance < bestDistance ? current : best;
+  });
 }
 
 function minutesToTime(totalMinutes) {
@@ -1115,7 +1140,11 @@ async function drawTravelExportHero(ctx, x, y, w, h) {
     ctx.save();
     roundRect(ctx, x, y, w, h, 16 * (w / 852), false);
     ctx.clip();
+    ctx.fillStyle = "rgb(219,238,242)";
+    ctx.fillRect(x, y, w, h);
+    ctx.globalAlpha = clampNumber(state.headerImageOpacity, 0, 100, 35) / 100;
     drawCoverImage(ctx, image, x, y, w, h, state.headerImageScale, state.headerImageX, state.headerImageY);
+    ctx.globalAlpha = 1;
     const gradient = ctx.createLinearGradient(x, y, x + w, y);
     gradient.addColorStop(0, "rgba(219,238,242,0.86)");
     gradient.addColorStop(0.62, "rgba(219,238,242,0.46)");
@@ -1611,7 +1640,7 @@ function buildIcs(schedule) {
         `UID:${item.id}@holiday-itinerary.local`,
         `DTSTAMP:${toIcsDateTime(new Date())}`,
         `DTSTART:${toIcsLocalDateTime(schedule.date, item.start)}`,
-        `DTEND:${toIcsLocalDateTime(schedule.date, item.end)}`,
+        `DTEND:${toIcsLocalDateTime(addDaysToDate(schedule.date, timeToMinutes(item.end) <= timeToMinutes(item.start) ? 1 : 0), item.end)}`,
         `SUMMARY:${escapeIcs(item.activity || schedule.title)}`,
         `LOCATION:${escapeIcs(item.place || schedule.area || "")}`,
         `DESCRIPTION:${escapeIcs(description)}`,
@@ -1625,6 +1654,13 @@ function toIcsLocalDateTime(date, time) {
   const [year, month, day] = date.split("-");
   const [hour, minute] = time.split(":");
   return `${year}${month}${day}T${hour}${minute}00`;
+}
+
+function addDaysToDate(date, days) {
+  if (!days) return date;
+  const value = new Date(`${date}T00:00:00`);
+  value.setDate(value.getDate() + days);
+  return value.toISOString().slice(0, 10);
 }
 
 function toIcsDateTime(date) {
@@ -1710,6 +1746,7 @@ headerImageResetButton.addEventListener("click", () => {
   state.headerImageScale = 100;
   state.headerImageX = 50;
   state.headerImageY = 50;
+  state.headerImageOpacity = 35;
   headerImageInput.value = "";
   saveState();
   renderSheet();
@@ -1723,6 +1760,7 @@ headerImageInput.addEventListener("change", async () => {
     state.headerImageScale = 100;
     state.headerImageX = 50;
     state.headerImageY = 50;
+    state.headerImageOpacity = 35;
     saveState();
     renderSheet();
     syncPanelControls();
@@ -1731,11 +1769,12 @@ headerImageInput.addEventListener("change", async () => {
     showStatus(ja.failed);
   }
 });
-[headerImageScale, headerImageX, headerImageY].forEach((input) => {
+[headerImageScale, headerImageX, headerImageY, headerImageOpacity].forEach((input) => {
   input?.addEventListener("input", () => {
     state.headerImageScale = clampNumber(headerImageScale?.value, 60, 180, 100);
     state.headerImageX = clampNumber(headerImageX?.value, 0, 100, 50);
     state.headerImageY = clampNumber(headerImageY?.value, 0, 100, 50);
+    state.headerImageOpacity = clampNumber(headerImageOpacity?.value, 0, 100, 35);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     applyHeaderImage();
   });

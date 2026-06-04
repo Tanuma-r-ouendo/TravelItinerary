@@ -1498,7 +1498,7 @@ textarea:focus {
   background: rgba(236, 126, 125, 0.4);
   border-radius: 6px;
   box-shadow: none;
-  display: block;
+  display: none;
   height: 23px;
   left: 72px;
   top: 14px;
@@ -1509,7 +1509,7 @@ textarea:focus {
 .template-travel .sheet-hero::after {
   background: rgba(221, 199, 125, 0.55);
   border-radius: 6px;
-  display: block;
+  display: none;
   height: 21px;
   right: 58px;
   top: 30px;
@@ -1526,7 +1526,7 @@ textarea:focus {
   content: "";
   height: 228px;
   left: -32px;
-  opacity: 0.35;
+  opacity: var(--hero-opacity, 0.35);
   pointer-events: none;
   position: absolute;
   top: -40px;
@@ -2036,6 +2036,7 @@ textarea:focus {
 
 .template-travel .sheet-hero .sheet-date-line::before {
   background: var(--hero-image, url("./assets/figma/hero-landscape.png")) var(--hero-position, center) / var(--hero-size, cover) no-repeat;
+  opacity: var(--hero-opacity, 0.35);
 }
 
 .template-travel .sheet-meta-panel {
