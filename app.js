@@ -1024,11 +1024,15 @@ async function drawTravelScheduleCanvas(type) {
   measure.font = `${16 * scale}px sans-serif`;
   const exportHeroHeight = clampNumber(state.headerHeight, 160, 360, 230) * scale;
   const headerDelta = exportHeroHeight - 230 * scale;
+  const metaY = 312 * scale + headerDelta;
+  const titleY = metaY + 84 * scale;
+  const titleBlockHeight = travelExportTitleBlockHeight(measure, state.title || ja.defaultTitle, contentW, scale);
+  const scheduleTitleY = titleY + titleBlockHeight;
   const noteHeight = state.packingVisible !== false ? Math.max(180 * scale, textHeight(measure, state.packing || ja.unfilled, contentW - 56 * scale, 30 * scale) + 86 * scale) : 0;
   const memoHeight = state.notes ? Math.max(150 * scale, textHeight(measure, state.notes, contentW - 56 * scale, 30 * scale) + 86 * scale) : 0;
   const itemGap = 16 * scale;
   const itemHeights = items.map((item) => travelCanvasItemHeight(item, contentW - 48 * scale, scale, measure));
-  const timelineTop = 392 * scale + headerDelta;
+  const timelineTop = scheduleTitleY;
   const itemsHeight = itemHeights.reduce((sum, value) => sum + value, 0) + Math.max(0, items.length - 1) * itemGap;
   const height = Math.max(1547 * scale, timelineTop + 72 * scale + itemsHeight + noteHeight + memoHeight + 104 * scale);
 
@@ -1041,7 +1045,8 @@ async function drawTravelScheduleCanvas(type) {
 
   await drawTravelPageBackground(ctx, width, canvas.height);
   await drawTravelExportHero(ctx, padding, 32 * scale, contentW, exportHeroHeight);
-  drawTravelExportMeta(ctx, padding, 312 * scale + headerDelta, contentW, scale);
+  drawTravelExportMeta(ctx, padding, metaY, contentW, scale);
+  drawTravelExportTitleBlock(ctx, padding, titleY, contentW, scale);
 
   let y = timelineTop;
   ctx.fillStyle = colors.text;
@@ -1151,27 +1156,33 @@ async function drawTravelExportHero(ctx, x, y, w, h) {
     ctx.clip();
     ctx.fillStyle = "rgb(219,238,242)";
     ctx.fillRect(x, y, w, h);
-    ctx.globalAlpha = clampNumber(state.headerImageOpacity, 0, 100, 35) / 100;
     drawCoverImage(ctx, image, x, y, w, h, state.headerImageScale, state.headerImageX, state.headerImageY);
-    ctx.globalAlpha = 1;
+    const filterStrength = 1 - clampNumber(state.headerImageOpacity, 0, 100, 35) / 100;
     const gradient = ctx.createLinearGradient(x, y, x + w, y);
-    gradient.addColorStop(0, "rgba(219,238,242,0.86)");
-    gradient.addColorStop(0.62, "rgba(219,238,242,0.46)");
-    gradient.addColorStop(1, "rgba(219,238,242,0.18)");
+    gradient.addColorStop(0, `rgba(219,238,242,${0.86 * filterStrength})`);
+    gradient.addColorStop(0.62, `rgba(219,238,242,${0.46 * filterStrength})`);
+    gradient.addColorStop(1, `rgba(219,238,242,${0.18 * filterStrength})`);
     ctx.fillStyle = gradient;
     ctx.fillRect(x, y, w, h);
     ctx.restore();
   } catch {
     drawTravelHeaderFallback(ctx, w + x * 2, x + 12);
   }
+}
 
-  const scale = w / 852;
-  ctx.fillStyle = "#1f3330";
+function drawTravelExportTitleBlock(ctx, x, y, w, scale) {
+  ctx.fillStyle = "#5f7060";
   ctx.font = `700 ${16 * scale}px sans-serif`;
-  ctx.fillText(`${formatDate(state.date)}${state.area ? ` / ${state.area}` : ""}`, x + 32 * scale, y + 64 * scale);
-  ctx.font = `800 ${50 * scale}px Georgia, serif`;
-  ctx.fillText(state.title || ja.defaultTitle, x + 32 * scale, y + 128 * scale);
+  ctx.fillText(`${formatDate(state.date)}${state.area ? ` / ${state.area}` : ""}`, x, y);
+  ctx.fillStyle = "#1f3330";
+  ctx.font = `800 ${48 * scale}px Georgia, serif`;
+  drawWrappedText(ctx, state.title || ja.defaultTitle, x, y + 58 * scale, w, 56 * scale, 2);
+}
 
+function travelExportTitleBlockHeight(ctx, title, width, scale) {
+  ctx.font = `800 ${48 * scale}px Georgia, serif`;
+  const titleLines = wrapText(ctx, title, width, 2).length;
+  return 58 * scale + Math.max(1, titleLines) * 56 * scale + 28 * scale;
 }
 
 function drawTravelExportMeta(ctx, x, y, w, scale) {
