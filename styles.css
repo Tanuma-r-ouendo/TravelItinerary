@@ -96,6 +96,10 @@ button {
   padding-bottom: 18px;
 }
 
+.panel-section[open] {
+  padding-bottom: 18px;
+}
+
 .panel-section:last-child {
   border-bottom: 0;
   padding-bottom: 0;
@@ -103,10 +107,36 @@ button {
 
 .section-heading {
   align-items: center;
+  cursor: pointer;
   display: flex;
   gap: 12px;
   justify-content: space-between;
   margin-bottom: 14px;
+  user-select: none;
+}
+
+.section-heading::-webkit-details-marker {
+  display: none;
+}
+
+.section-heading::after {
+  align-items: center;
+  border: 1px solid rgba(32, 117, 104, 0.24);
+  border-radius: 999px;
+  color: #207568;
+  content: "+";
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 15px;
+  font-weight: 900;
+  height: 22px;
+  justify-content: center;
+  line-height: 1;
+  width: 22px;
+}
+
+.panel-section[open] > .section-heading::after {
+  content: "-";
 }
 
 .section-heading h2 {
@@ -142,6 +172,39 @@ button {
 .save-controls {
   display: grid;
   gap: 8px;
+}
+
+.header-adjustment-details {
+  border: 1px solid rgba(32, 117, 104, 0.12);
+  border-radius: 8px;
+  padding: 0;
+}
+
+.header-adjustment-details summary {
+  color: #207568;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  list-style: none;
+  padding: 9px 10px;
+  user-select: none;
+}
+
+.header-adjustment-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.header-adjustment-details summary::after {
+  content: " +";
+}
+
+.header-adjustment-details[open] summary::after {
+  content: " -";
+}
+
+.header-adjustment-details .header-image-adjustments {
+  border-top: 1px solid rgba(32, 117, 104, 0.1);
+  padding: 10px;
 }
 
 .header-image-adjustments label,

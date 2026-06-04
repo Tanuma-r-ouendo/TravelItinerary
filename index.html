@@ -81,38 +81,41 @@
 
       <main class="workspace">
         <aside class="control-panel" aria-label="controls">
-          <section class="panel-section">
-            <div class="section-heading">
+          <details class="panel-section" open>
+            <summary class="section-heading">
               <h2>&#12487;&#12470;&#12452;&#12531;</h2>
-            </div>
+            </summary>
             <div class="template-picker" id="templatePicker"></div>
             <div class="header-image-control">
               <input id="headerImageInput" type="file" accept="image/*" hidden />
               <button class="ghost-button" id="headerImageButton" type="button">Header画像を変更</button>
-              <div class="header-image-adjustments">
-                <label>拡大 <input id="headerImageScale" type="range" min="100" max="180" value="100" /></label>
-                <label>左右 <input id="headerImageX" type="range" min="0" max="100" value="50" /></label>
-                <label>上下 <input id="headerImageY" type="range" min="0" max="100" value="50" /></label>
-              </div>
+              <details class="header-adjustment-details">
+                <summary>Header画像の位置調整</summary>
+                <div class="header-image-adjustments">
+                  <label>拡大/縮小 <input id="headerImageScale" type="range" min="60" max="180" value="100" /></label>
+                  <label>左右 <input id="headerImageX" type="range" min="0" max="100" value="50" /></label>
+                  <label>上下 <input id="headerImageY" type="range" min="0" max="100" value="50" /></label>
+                </div>
+              </details>
               <button class="ghost-button" id="headerImageResetButton" type="button">Header画像を戻す</button>
             </div>
-          </section>
+          </details>
 
-          <section class="panel-section">
-            <div class="section-heading">
+          <details class="panel-section" open>
+            <summary class="section-heading">
               <h2>&#25805;&#20316;</h2>
-            </div>
+            </summary>
             <div class="control-stack">
               <button class="primary-button" id="addItemButton" type="button">&#20104;&#23450;&#12434;&#36861;&#21152;</button>
               <button class="ghost-button" id="sortButton" type="button">&#26178;&#21051;&#38918;&#12395;&#20006;&#12409;&#26367;&#12360;</button>
               <label class="toggle-control"><input id="packingVisibleToggle" type="checkbox" /> 持ち物欄を表示</label>
             </div>
-          </section>
+          </details>
 
-          <section class="panel-section">
-            <div class="section-heading">
+          <details class="panel-section">
+            <summary class="section-heading">
               <h2>保存</h2>
-            </div>
+            </summary>
             <div class="save-controls">
               <input id="scheduleSaveName" type="text" placeholder="保存名" />
               <button class="ghost-button" id="saveScheduleButton" type="button">保存</button>
@@ -122,12 +125,12 @@
                 <button class="danger-button" id="deleteScheduleButton" type="button">削除</button>
               </div>
             </div>
-          </section>
+          </details>
 
-          <section class="panel-section">
-            <div class="section-heading">
+          <details class="panel-section" open>
+            <summary class="section-heading">
               <h2>&#20986;&#21147;</h2>
-            </div>
+            </summary>
             <div class="export-actions">
               <button id="pngButton" type="button">PNG</button>
               <button id="jpegButton" type="button">JPEG</button>
@@ -135,7 +138,7 @@
               <button id="icsButton" type="button">ICS</button>
             </div>
             <p class="status-text" id="statusText"></p>
-          </section>
+          </details>
         </aside>
 
         <section class="preview-panel" aria-label="editable itinerary">

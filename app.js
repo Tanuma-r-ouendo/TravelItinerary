@@ -226,7 +226,7 @@ function loadState() {
     const parsed = { ...createBlankState(), ...JSON.parse(saved) };
     if (parsed.title === "\u4f11\u65e5\u304a\u3067\u304b\u3051\u30d7\u30e9\u30f3") parsed.title = ja.defaultTitle;
     parsed.headerImageDataUrl = isImageDataUrl(parsed.headerImageDataUrl) ? parsed.headerImageDataUrl : "";
-    parsed.headerImageScale = clampNumber(parsed.headerImageScale, 100, 180, 100);
+    parsed.headerImageScale = clampNumber(parsed.headerImageScale, 60, 180, 100);
     parsed.headerImageX = clampNumber(parsed.headerImageX, 0, 100, 50);
     parsed.headerImageY = clampNumber(parsed.headerImageY, 0, 100, 50);
     parsed.packingVisible = parsed.packingVisible !== false;
@@ -294,7 +294,7 @@ function writeSavedSchedules(schedules) {
 function normalizeSchedule(schedule) {
   const normalized = { ...createBlankState(), ...schedule };
   normalized.headerImageDataUrl = isImageDataUrl(normalized.headerImageDataUrl) ? normalized.headerImageDataUrl : "";
-  normalized.headerImageScale = clampNumber(normalized.headerImageScale, 100, 180, 100);
+  normalized.headerImageScale = clampNumber(normalized.headerImageScale, 60, 180, 100);
   normalized.headerImageX = clampNumber(normalized.headerImageX, 0, 100, 50);
   normalized.headerImageY = clampNumber(normalized.headerImageY, 0, 100, 50);
   normalized.packingVisible = normalized.packingVisible !== false;
@@ -305,7 +305,7 @@ function normalizeSchedule(schedule) {
 
 function syncPanelControls() {
   if (packingVisibleToggle) packingVisibleToggle.checked = state.packingVisible !== false;
-  if (headerImageScale) headerImageScale.value = clampNumber(state.headerImageScale, 100, 180, 100);
+  if (headerImageScale) headerImageScale.value = clampNumber(state.headerImageScale, 60, 180, 100);
   if (headerImageX) headerImageX.value = clampNumber(state.headerImageX, 0, 100, 50);
   if (headerImageY) headerImageY.value = clampNumber(state.headerImageY, 0, 100, 50);
   renderSavedScheduleOptions();
@@ -439,7 +439,7 @@ function applyHeaderImage() {
   if (!hero) return;
   if (isImageDataUrl(state.headerImageDataUrl)) {
     hero.style.setProperty("--hero-image", `url("${state.headerImageDataUrl}")`);
-    hero.style.setProperty("--hero-size", `${clampNumber(state.headerImageScale, 100, 180, 100)}% auto`);
+    hero.style.setProperty("--hero-size", `${clampNumber(state.headerImageScale, 60, 180, 100)}% auto`);
     hero.style.setProperty("--hero-position", `${clampNumber(state.headerImageX, 0, 100, 50)}% ${clampNumber(state.headerImageY, 0, 100, 50)}%`);
   } else {
     hero.style.removeProperty("--hero-image");
@@ -1483,7 +1483,7 @@ function getHeaderImageSrc() {
 }
 
 function drawCoverImage(ctx, image, x, y, width, height, scaleValue = 100, posXValue = 50, posYValue = 50) {
-  const zoom = clampNumber(scaleValue, 100, 180, 100) / 100;
+  const zoom = clampNumber(scaleValue, 60, 180, 100) / 100;
   const posX = clampNumber(posXValue, 0, 100, 50) / 100;
   const posY = clampNumber(posYValue, 0, 100, 50) / 100;
   const coverScale = Math.max(width / image.width, height / image.height) * zoom;
@@ -1733,7 +1733,7 @@ headerImageInput.addEventListener("change", async () => {
 });
 [headerImageScale, headerImageX, headerImageY].forEach((input) => {
   input?.addEventListener("input", () => {
-    state.headerImageScale = clampNumber(headerImageScale?.value, 100, 180, 100);
+    state.headerImageScale = clampNumber(headerImageScale?.value, 60, 180, 100);
     state.headerImageX = clampNumber(headerImageX?.value, 0, 100, 50);
     state.headerImageY = clampNumber(headerImageY?.value, 0, 100, 50);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
