@@ -1027,7 +1027,7 @@ async function drawTravelScheduleCanvas(type) {
   const noteHeight = state.packingVisible !== false ? Math.max(180 * scale, textHeight(measure, state.packing || ja.unfilled, contentW - 56 * scale, 30 * scale) + 86 * scale) : 0;
   const memoHeight = state.notes ? Math.max(150 * scale, textHeight(measure, state.notes, contentW - 56 * scale, 30 * scale) + 86 * scale) : 0;
   const itemGap = 16 * scale;
-  const itemHeights = items.map((item) => (hasVisibleDetails(item) ? 164 * scale : 84 * scale));
+  const itemHeights = items.map((item) => travelCanvasItemHeight(item, contentW - 48 * scale, scale, measure));
   const timelineTop = 392 * scale + headerDelta;
   const itemsHeight = itemHeights.reduce((sum, value) => sum + value, 0) + Math.max(0, items.length - 1) * itemGap;
   const height = Math.max(1547 * scale, timelineTop + 72 * scale + itemsHeight + noteHeight + memoHeight + 104 * scale);
@@ -1166,10 +1166,6 @@ async function drawTravelExportHero(ctx, x, y, w, h) {
   }
 
   const scale = w / 852;
-  ctx.fillStyle = "rgba(236,126,125,0.4)";
-  roundRect(ctx, x + 72 * scale, y + 14 * scale, 90 * scale, 23 * scale, 6 * scale, true);
-  ctx.fillStyle = "rgba(221,199,125,0.55)";
-  roundRect(ctx, x + w - 170 * scale, y + 30 * scale, 112 * scale, 21 * scale, 6 * scale, true);
   ctx.fillStyle = "#1f3330";
   ctx.font = `700 ${16 * scale}px sans-serif`;
   ctx.fillText(`${formatDate(state.date)}${state.area ? ` / ${state.area}` : ""}`, x + 32 * scale, y + 64 * scale);
@@ -1219,25 +1215,54 @@ function drawTravelCanvasTime(ctx, item, x, y, scale, accent) {
   ctx.fillRect(x + 200 * scale, y + 3 * scale, 1 * scale, 24 * scale);
 }
 
-function drawTravelCanvasDetails(ctx, item, x, y, width, scale) {
-  const details = [
+function travelCanvasItemHeight(item, cardWidth, scale, measureCtx) {
+  if (!hasVisibleDetails(item)) return 84 * scale;
+  const detailsHeight = measureTravelCanvasDetailsHeight(item, cardWidth - 24 * scale, scale, measureCtx);
+  return Math.max(164 * scale, 92 * scale + detailsHeight + 22 * scale);
+}
+
+function measureTravelCanvasDetailsHeight(item, width, scale, measureCtx) {
+  const compactDetails = [
     item.detailVisible?.place && item.place && [ja.place, item.place],
     item.detailVisible?.transport && item.transport && [ja.move, item.transport],
-    item.detailVisible?.memo && item.memo && [ja.memo, item.memo],
     item.detailVisible?.url && item.url && ["URL", item.url],
   ].filter(Boolean);
-  details.slice(0, 4).forEach(([label, value], index) => {
-    const col = index % 2;
-    const row = Math.floor(index / 2);
-    const dx = x + col * 256 * scale;
-    const dy = y + row * 42 * scale;
+  const memo = item.detailVisible?.memo && item.memo ? item.memo : "";
+  let height = compactDetails.length ? 42 * scale : 0;
+  if (memo) {
+    measureCtx.font = `400 ${13 * scale}px sans-serif`;
+    const memoLines = wrapText(measureCtx, memo, width);
+    height += (height ? 10 * scale : 0) + 18 * scale + Math.max(1, memoLines.length) * 18 * scale;
+  }
+  return Math.max(42 * scale, height);
+}
+
+function drawTravelCanvasDetails(ctx, item, x, y, width, scale) {
+  const compactDetails = [
+    item.detailVisible?.place && item.place && [ja.place, item.place],
+    item.detailVisible?.transport && item.transport && [ja.move, item.transport],
+    item.detailVisible?.url && item.url && ["URL", item.url],
+  ].filter(Boolean);
+  compactDetails.slice(0, 3).forEach(([label, value], index) => {
+    const colW = width / Math.max(1, Math.min(3, compactDetails.length));
+    const dx = x + colW * index;
+    const dy = y;
     ctx.fillStyle = "#5f7060";
     ctx.font = `700 ${10 * scale}px sans-serif`;
     ctx.fillText(label, dx, dy);
     ctx.fillStyle = "#1f3330";
     ctx.font = `400 ${13 * scale}px sans-serif`;
-    drawWrappedText(ctx, value, dx, dy + 18 * scale, Math.min(240 * scale, width - col * 256 * scale), 18 * scale, 1);
+    drawWrappedText(ctx, value, dx, dy + 18 * scale, colW - 12 * scale, 18 * scale, 1);
   });
+  if (item.detailVisible?.memo && item.memo) {
+    const memoY = y + (compactDetails.length ? 52 * scale : 0);
+    ctx.fillStyle = "#5f7060";
+    ctx.font = `700 ${10 * scale}px sans-serif`;
+    ctx.fillText(ja.memo, x, memoY);
+    ctx.fillStyle = "#1f3330";
+    ctx.font = `400 ${13 * scale}px sans-serif`;
+    drawWrappedText(ctx, item.memo, x, memoY + 18 * scale, width, 18 * scale);
+  }
 }
 
 async function drawTravelCanvasNote(ctx, title, body, x, y, w, h, scale) {
