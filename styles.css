@@ -138,6 +138,32 @@ button {
   width: 100%;
 }
 
+.header-image-adjustments,
+.save-controls {
+  display: grid;
+  gap: 8px;
+}
+
+.header-image-adjustments label,
+.toggle-control {
+  align-items: center;
+  color: #5f7060;
+  display: grid;
+  font-size: 12px;
+  font-weight: 800;
+  gap: 6px;
+}
+
+.toggle-control {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.save-actions-row {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+}
+
 input,
 textarea {
   background: #ffffff;
@@ -1922,6 +1948,112 @@ textarea:focus {
   left: 7px;
   right: 7px;
   top: 7.25px;
+}
+
+.template-travel {
+  height: auto;
+  min-height: 1546px;
+  overflow: visible;
+  padding: 32px 24px 32px;
+}
+
+.template-travel .sheet-hero,
+.template-travel .sheet-meta-panel,
+.template-travel .sheet-section {
+  left: auto;
+  position: relative;
+  top: auto;
+  width: auto;
+}
+
+.template-travel .sheet-hero {
+  background: rgba(219, 238, 242, 0.82) !important;
+  margin: 0 0 28px;
+}
+
+.template-travel .sheet-hero .sheet-date-line::before {
+  background: var(--hero-image, url("./assets/figma/hero-landscape.png")) var(--hero-position, center) / var(--hero-size, cover) no-repeat;
+}
+
+.template-travel .sheet-meta-panel {
+  margin: 0 0 34px;
+}
+
+.template-travel .sheet-section {
+  margin-top: 0;
+}
+
+.template-travel .sheet-section:nth-of-type(1),
+.template-travel .sheet-section:nth-of-type(2),
+.template-travel .packing-section {
+  height: auto;
+  left: auto;
+  min-height: 0;
+  top: auto;
+  width: auto;
+}
+
+.template-travel .packing-section {
+  margin-top: 28px;
+}
+
+.template-travel .sheet-item {
+  grid-template-columns: 36px minmax(0, 1fr);
+  min-height: 0;
+  padding-bottom: 16px;
+}
+
+.template-travel .sheet-item.no-details {
+  min-height: 0;
+}
+
+.template-travel .sheet-item.no-details.add-menu-open {
+  min-height: 0;
+}
+
+.template-travel .sheet-item::before {
+  height: calc(100% - 28px);
+}
+
+.template-travel .sheet-timeline .sheet-item .rail-dot {
+  background: var(--item-accent, #207568) !important;
+}
+
+.template-travel .sheet-timeline .sheet-item.time-overlap .rail-dot {
+  background: #c73646 !important;
+}
+
+.template-travel .item-card,
+.template-travel .sheet-item.no-details .item-card,
+.template-travel .sheet-item.no-details.add-menu-open .item-card {
+  height: auto;
+  min-height: 84px;
+}
+
+.template-travel .item-card {
+  padding-bottom: 14px;
+}
+
+.template-travel .item-dots {
+  width: calc(100% - 24px);
+}
+
+.template-travel .item-details-inline {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.template-travel .inline-detail-memo {
+  grid-column: 1 / -1;
+  min-height: 36px;
+}
+
+.template-travel .inline-detail-row:not(.inline-detail-memo) .inline-detail-input {
+  min-height: 32px;
+}
+
+.template-travel .note-box {
+  height: auto;
+  min-height: 124px;
 }
 
 @media (max-width: 980px) {

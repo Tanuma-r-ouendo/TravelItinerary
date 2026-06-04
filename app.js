@@ -1,4 +1,5 @@
 ﻿const STORAGE_KEY = "holiday-itinerary-v5";
+const SAVED_SCHEDULES_KEY = "holiday-itinerary-saved-schedules-v1";
 
 const ja = {
   templateSchool: "\u3057\u304a\u308a\u98a8",
@@ -35,6 +36,9 @@ const ja = {
   exported: "\u51fa\u529b\u3057\u307e\u3057\u305f",
   failed: "\u51fa\u529b\u306b\u5931\u6557\u3057\u307e\u3057\u305f",
   resetConfirm: "\u5165\u529b\u5185\u5bb9\u3092\u521d\u671f\u5316\u3057\u307e\u3059\u304b\uff1f",
+  scheduleSaved: "\u65e5\u7a0b\u3092\u4fdd\u5b58\u3057\u307e\u3057\u305f",
+  scheduleLoaded: "\u65e5\u7a0b\u3092\u8aad\u307f\u8fbc\u307f\u307e\u3057\u305f",
+  scheduleDeleted: "\u4fdd\u5b58\u3057\u305f\u65e5\u7a0b\u3092\u524a\u9664\u3057\u307e\u3057\u305f",
 };
 
 const templates = [
@@ -118,6 +122,15 @@ const statusText = document.querySelector("#statusText");
 const headerImageInput = document.querySelector("#headerImageInput");
 const headerImageButton = document.querySelector("#headerImageButton");
 const headerImageResetButton = document.querySelector("#headerImageResetButton");
+const headerImageScale = document.querySelector("#headerImageScale");
+const headerImageX = document.querySelector("#headerImageX");
+const headerImageY = document.querySelector("#headerImageY");
+const packingVisibleToggle = document.querySelector("#packingVisibleToggle");
+const scheduleSaveName = document.querySelector("#scheduleSaveName");
+const saveScheduleButton = document.querySelector("#saveScheduleButton");
+const savedScheduleSelect = document.querySelector("#savedScheduleSelect");
+const loadScheduleButton = document.querySelector("#loadScheduleButton");
+const deleteScheduleButton = document.querySelector("#deleteScheduleButton");
 
 let state = loadState();
 
@@ -157,6 +170,9 @@ function createBlankState() {
     date: new Date().toISOString().slice(0, 10),
     area: "",
     headerImageDataUrl: "",
+    headerImageScale: 100,
+    headerImageX: 50,
+    headerImageY: 50,
     participants: "",
     meeting: "",
     dismissal: "",
@@ -165,6 +181,7 @@ function createBlankState() {
       meeting: false,
       dismissal: false,
     },
+    packingVisible: true,
     packing: "",
     notes: "",
     template: "travel",
@@ -177,6 +194,10 @@ function createSampleState() {
     title: ja.sampleTitle,
     date: "2026-06-13",
     area: ja.sampleArea,
+    headerImageDataUrl: "",
+    headerImageScale: 100,
+    headerImageX: 50,
+    headerImageY: 50,
     participants: ja.sampleParticipants,
     meeting: ja.stationEast,
     dismissal: ja.station,
@@ -185,6 +206,7 @@ function createSampleState() {
       meeting: true,
       dismissal: true,
     },
+    packingVisible: true,
     packing: ja.packingSample,
     notes: ja.notesSample,
     template: "travel",
@@ -204,6 +226,10 @@ function loadState() {
     const parsed = { ...createBlankState(), ...JSON.parse(saved) };
     if (parsed.title === "\u4f11\u65e5\u304a\u3067\u304b\u3051\u30d7\u30e9\u30f3") parsed.title = ja.defaultTitle;
     parsed.headerImageDataUrl = isImageDataUrl(parsed.headerImageDataUrl) ? parsed.headerImageDataUrl : "";
+    parsed.headerImageScale = clampNumber(parsed.headerImageScale, 100, 180, 100);
+    parsed.headerImageX = clampNumber(parsed.headerImageX, 0, 100, 50);
+    parsed.headerImageY = clampNumber(parsed.headerImageY, 0, 100, 50);
+    parsed.packingVisible = parsed.packingVisible !== false;
     parsed.items = parsed.items.map(normalizeItem);
     parsed.metaVisible = normalizeMetaVisibility(parsed);
     return parsed;
@@ -246,6 +272,90 @@ function saveState() {
   showStatus(ja.saved);
 }
 
+function clampNumber(value, min, max, fallback) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return fallback;
+  return Math.min(max, Math.max(min, number));
+}
+
+function loadSavedSchedules() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(SAVED_SCHEDULES_KEY) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeSavedSchedules(schedules) {
+  localStorage.setItem(SAVED_SCHEDULES_KEY, JSON.stringify(schedules));
+}
+
+function normalizeSchedule(schedule) {
+  const normalized = { ...createBlankState(), ...schedule };
+  normalized.headerImageDataUrl = isImageDataUrl(normalized.headerImageDataUrl) ? normalized.headerImageDataUrl : "";
+  normalized.headerImageScale = clampNumber(normalized.headerImageScale, 100, 180, 100);
+  normalized.headerImageX = clampNumber(normalized.headerImageX, 0, 100, 50);
+  normalized.headerImageY = clampNumber(normalized.headerImageY, 0, 100, 50);
+  normalized.packingVisible = normalized.packingVisible !== false;
+  normalized.items = Array.isArray(normalized.items) ? normalized.items.map(normalizeItem) : createBlankState().items;
+  normalized.metaVisible = normalizeMetaVisibility(normalized);
+  return normalized;
+}
+
+function syncPanelControls() {
+  if (packingVisibleToggle) packingVisibleToggle.checked = state.packingVisible !== false;
+  if (headerImageScale) headerImageScale.value = clampNumber(state.headerImageScale, 100, 180, 100);
+  if (headerImageX) headerImageX.value = clampNumber(state.headerImageX, 0, 100, 50);
+  if (headerImageY) headerImageY.value = clampNumber(state.headerImageY, 0, 100, 50);
+  renderSavedScheduleOptions();
+}
+
+function renderSavedScheduleOptions() {
+  if (!savedScheduleSelect) return;
+  const schedules = loadSavedSchedules();
+  const selected = savedScheduleSelect.value;
+  savedScheduleSelect.innerHTML = schedules.length
+    ? schedules.map((entry) => `<option value="${escapeAttr(entry.id)}">${escapeHtml(entry.name)}</option>`).join("")
+    : '<option value="">保存データなし</option>';
+  if (schedules.some((entry) => entry.id === selected)) savedScheduleSelect.value = selected;
+}
+
+function saveNamedSchedule() {
+  const schedules = loadSavedSchedules();
+  const name = (scheduleSaveName?.value || state.title || ja.defaultTitle).trim() || ja.defaultTitle;
+  const id = savedScheduleSelect?.value && schedules.some((entry) => entry.id === savedScheduleSelect.value) ? savedScheduleSelect.value : createId();
+  const entry = {
+    id,
+    name,
+    updatedAt: new Date().toISOString(),
+    data: JSON.parse(JSON.stringify(state)),
+  };
+  const next = [entry, ...schedules.filter((item) => item.id !== id)].slice(0, 20);
+  writeSavedSchedules(next);
+  renderSavedScheduleOptions();
+  if (savedScheduleSelect) savedScheduleSelect.value = id;
+  showStatus(ja.scheduleSaved);
+}
+
+function loadNamedSchedule() {
+  const id = savedScheduleSelect?.value;
+  const entry = loadSavedSchedules().find((item) => item.id === id);
+  if (!entry) return;
+  state = normalizeSchedule(entry.data);
+  saveState();
+  renderAll();
+  showStatus(ja.scheduleLoaded);
+}
+
+function deleteNamedSchedule() {
+  const id = savedScheduleSelect?.value;
+  if (!id) return;
+  writeSavedSchedules(loadSavedSchedules().filter((item) => item.id !== id));
+  renderSavedScheduleOptions();
+  showStatus(ja.scheduleDeleted);
+}
+
 function showStatus(message) {
   statusText.textContent = message;
   window.clearTimeout(showStatus.timer);
@@ -255,6 +365,7 @@ function showStatus(message) {
 function renderAll() {
   renderTemplates();
   renderSheet();
+  syncPanelControls();
 }
 
 function renderTemplates() {
@@ -305,12 +416,13 @@ function renderSheet() {
       <button class="sheet-add-item-button" type="button" data-sheet-action="add-item">+ ${ja.newItem}</button>
     </section>
 
-    <section class="sheet-section">
-      <h3>${ja.packing}</h3>
-      <div class="note-frame">
-        <textarea class="note-box sheet-textarea" data-field="packing" rows="4">${escapeHtml(state.packing)}</textarea>
-      </div>
-    </section>
+    ${state.packingVisible ? `
+      <section class="sheet-section packing-section">
+        <h3>${ja.packing}</h3>
+        <div class="note-frame">
+          <textarea class="note-box sheet-textarea" data-field="packing" rows="4">${escapeHtml(state.packing)}</textarea>
+        </div>
+      </section>` : ""}
 
     <section class="sheet-section memo-section">
       <h3>${ja.memo}</h3>
@@ -327,8 +439,12 @@ function applyHeaderImage() {
   if (!hero) return;
   if (isImageDataUrl(state.headerImageDataUrl)) {
     hero.style.setProperty("--hero-image", `url("${state.headerImageDataUrl}")`);
+    hero.style.setProperty("--hero-size", `${clampNumber(state.headerImageScale, 100, 180, 100)}% auto`);
+    hero.style.setProperty("--hero-position", `${clampNumber(state.headerImageX, 0, 100, 50)}% ${clampNumber(state.headerImageY, 0, 100, 50)}%`);
   } else {
     hero.style.removeProperty("--hero-image");
+    hero.style.removeProperty("--hero-size");
+    hero.style.removeProperty("--hero-position");
   }
 }
 
@@ -483,7 +599,7 @@ function renderDetailField(item, field) {
       ? `<textarea class="inline-detail-input inline-detail-memo" rows="1" data-item-field="memo" placeholder="${detailLabel(field)}">${escapeHtml(item.memo)}</textarea>`
       : `<input class="inline-detail-input" type="${field === "url" ? "url" : "text"}" data-item-field="${field}" value="${escapeAttr(item[field])}" placeholder="${detailLabel(field)}" />`;
   return `
-    <div class="inline-detail-row" data-label="${escapeAttr(detailLabel(field))}">
+    <div class="inline-detail-row inline-detail-${escapeAttr(field)}" data-label="${escapeAttr(detailLabel(field))}">
       ${input}
       <button type="button" data-action="hide-detail" data-detail="${field}" aria-label="hide ${field}">&#8722;</button>
     </div>`;
@@ -760,7 +876,8 @@ async function drawScheduleCanvas(type) {
   ctxMeasure.font = "30px sans-serif";
 
   const items = state.items;
-  let height = 520 + items.length * 178 + textHeight(ctxMeasure, state.packing || ja.unfilled, width - padding * 2, 30) + textHeight(ctxMeasure, state.notes || ja.unfilled, width - padding * 2, 30);
+  let height = 520 + items.length * 178 + textHeight(ctxMeasure, state.notes || ja.unfilled, width - padding * 2, 30);
+  if (state.packingVisible !== false) height += textHeight(ctxMeasure, state.packing || ja.unfilled, width - padding * 2, 30);
   height = Math.max(1400, height);
 
   const canvas = document.createElement("canvas");
@@ -859,7 +976,7 @@ async function drawScheduleCanvas(type) {
   });
 
   y += 18;
-  y = drawNoteSection(ctx, ja.packing, state.packing || ja.unfilled, padding, y, width - padding * 2, colors);
+  if (state.packingVisible !== false) y = drawNoteSection(ctx, ja.packing, state.packing || ja.unfilled, padding, y, width - padding * 2, colors);
   y = drawNoteSection(ctx, ja.memo, state.notes || ja.unfilled, padding, y + 34, width - padding * 2, colors);
   return canvas;
 }
@@ -873,7 +990,7 @@ async function drawTravelScheduleCanvas(type) {
   const items = state.items;
   const measure = document.createElement("canvas").getContext("2d");
   measure.font = `${16 * scale}px sans-serif`;
-  const noteHeight = Math.max(180 * scale, textHeight(measure, state.packing || ja.unfilled, contentW - 56 * scale, 30 * scale) + 86 * scale);
+  const noteHeight = state.packingVisible !== false ? Math.max(180 * scale, textHeight(measure, state.packing || ja.unfilled, contentW - 56 * scale, 30 * scale) + 86 * scale) : 0;
   const memoHeight = state.notes ? Math.max(150 * scale, textHeight(measure, state.notes, contentW - 56 * scale, 30 * scale) + 86 * scale) : 0;
   const itemGap = 16 * scale;
   const itemHeights = items.map((item) => (hasVisibleDetails(item) ? 164 * scale : 84 * scale));
@@ -966,7 +1083,7 @@ async function drawTravelScheduleCanvas(type) {
   });
 
   y += itemsHeight + 28 * scale;
-  y = await drawTravelCanvasNote(ctx, ja.packing, state.packing || ja.unfilled, padding, y, contentW, noteHeight, scale);
+  if (state.packingVisible !== false) y = await drawTravelCanvasNote(ctx, ja.packing, state.packing || ja.unfilled, padding, y, contentW, noteHeight, scale);
   if (state.notes) await drawTravelCanvasNote(ctx, ja.memo, state.notes, padding, y + 28 * scale, contentW, memoHeight, scale);
   return canvas;
 }
@@ -998,7 +1115,7 @@ async function drawTravelExportHero(ctx, x, y, w, h) {
     ctx.save();
     roundRect(ctx, x, y, w, h, 16 * (w / 852), false);
     ctx.clip();
-    ctx.drawImage(image, x, y, w, h);
+    drawCoverImage(ctx, image, x, y, w, h, state.headerImageScale, state.headerImageX, state.headerImageY);
     const gradient = ctx.createLinearGradient(x, y, x + w, y);
     gradient.addColorStop(0, "rgba(219,238,242,0.86)");
     gradient.addColorStop(0.62, "rgba(219,238,242,0.46)");
@@ -1365,6 +1482,18 @@ function getHeaderImageSrc() {
   return isImageDataUrl(state.headerImageDataUrl) ? state.headerImageDataUrl : "./assets/figma/hero-landscape.png";
 }
 
+function drawCoverImage(ctx, image, x, y, width, height, scaleValue = 100, posXValue = 50, posYValue = 50) {
+  const zoom = clampNumber(scaleValue, 100, 180, 100) / 100;
+  const posX = clampNumber(posXValue, 0, 100, 50) / 100;
+  const posY = clampNumber(posYValue, 0, 100, 50) / 100;
+  const coverScale = Math.max(width / image.width, height / image.height) * zoom;
+  const drawW = image.width * coverScale;
+  const drawH = image.height * coverScale;
+  const drawX = x - (drawW - width) * posX;
+  const drawY = y - (drawH - height) * posY;
+  ctx.drawImage(image, drawX, drawY, drawW, drawH);
+}
+
 function isImageDataUrl(value) {
   return typeof value === "string" && /^data:image\/(?:png|jpe?g|webp|gif);base64,/i.test(value);
 }
@@ -1578,22 +1707,48 @@ document.querySelector("#sortButton").addEventListener("click", sortItems);
 headerImageButton.addEventListener("click", () => headerImageInput.click());
 headerImageResetButton.addEventListener("click", () => {
   state.headerImageDataUrl = "";
+  state.headerImageScale = 100;
+  state.headerImageX = 50;
+  state.headerImageY = 50;
   headerImageInput.value = "";
   saveState();
   renderSheet();
+  syncPanelControls();
 });
 headerImageInput.addEventListener("change", async () => {
   const file = headerImageInput.files?.[0];
   if (!file) return;
   try {
     state.headerImageDataUrl = await readHeaderImageFile(file);
+    state.headerImageScale = 100;
+    state.headerImageX = 50;
+    state.headerImageY = 50;
     saveState();
     renderSheet();
+    syncPanelControls();
   } catch (error) {
     console.error(error);
-    showStatus("画像の読み込みに失敗しました");
+    showStatus(ja.failed);
   }
 });
+[headerImageScale, headerImageX, headerImageY].forEach((input) => {
+  input?.addEventListener("input", () => {
+    state.headerImageScale = clampNumber(headerImageScale?.value, 100, 180, 100);
+    state.headerImageX = clampNumber(headerImageX?.value, 0, 100, 50);
+    state.headerImageY = clampNumber(headerImageY?.value, 0, 100, 50);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    applyHeaderImage();
+  });
+});
+packingVisibleToggle?.addEventListener("change", () => {
+  state.packingVisible = packingVisibleToggle.checked;
+  saveState();
+  renderSheet();
+  syncPanelControls();
+});
+saveScheduleButton?.addEventListener("click", saveNamedSchedule);
+loadScheduleButton?.addEventListener("click", loadNamedSchedule);
+deleteScheduleButton?.addEventListener("click", deleteNamedSchedule);
 document.querySelector("#pngButton").addEventListener("click", () => exportImage("png"));
 document.querySelector("#jpegButton").addEventListener("click", () => exportImage("jpeg"));
 document.querySelector("#pdfButton").addEventListener("click", exportPdf);

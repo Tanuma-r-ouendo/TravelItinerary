@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
@@ -89,6 +89,11 @@
             <div class="header-image-control">
               <input id="headerImageInput" type="file" accept="image/*" hidden />
               <button class="ghost-button" id="headerImageButton" type="button">Header画像を変更</button>
+              <div class="header-image-adjustments">
+                <label>拡大 <input id="headerImageScale" type="range" min="100" max="180" value="100" /></label>
+                <label>左右 <input id="headerImageX" type="range" min="0" max="100" value="50" /></label>
+                <label>上下 <input id="headerImageY" type="range" min="0" max="100" value="50" /></label>
+              </div>
               <button class="ghost-button" id="headerImageResetButton" type="button">Header画像を戻す</button>
             </div>
           </section>
@@ -100,6 +105,22 @@
             <div class="control-stack">
               <button class="primary-button" id="addItemButton" type="button">&#20104;&#23450;&#12434;&#36861;&#21152;</button>
               <button class="ghost-button" id="sortButton" type="button">&#26178;&#21051;&#38918;&#12395;&#20006;&#12409;&#26367;&#12360;</button>
+              <label class="toggle-control"><input id="packingVisibleToggle" type="checkbox" /> 持ち物欄を表示</label>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <h2>保存</h2>
+            </div>
+            <div class="save-controls">
+              <input id="scheduleSaveName" type="text" placeholder="保存名" />
+              <button class="ghost-button" id="saveScheduleButton" type="button">保存</button>
+              <select id="savedScheduleSelect"></select>
+              <div class="save-actions-row">
+                <button class="ghost-button" id="loadScheduleButton" type="button">読込</button>
+                <button class="danger-button" id="deleteScheduleButton" type="button">削除</button>
+              </div>
             </div>
           </section>
 
