@@ -126,6 +126,7 @@ const headerImageScale = document.querySelector("#headerImageScale");
 const headerImageX = document.querySelector("#headerImageX");
 const headerImageY = document.querySelector("#headerImageY");
 const headerImageOpacity = document.querySelector("#headerImageOpacity");
+const headerHeight = document.querySelector("#headerHeight");
 const packingVisibleToggle = document.querySelector("#packingVisibleToggle");
 const scheduleSaveName = document.querySelector("#scheduleSaveName");
 const saveScheduleButton = document.querySelector("#saveScheduleButton");
@@ -175,6 +176,7 @@ function createBlankState() {
     headerImageX: 50,
     headerImageY: 50,
     headerImageOpacity: 35,
+    headerHeight: 230,
     participants: "",
     meeting: "",
     dismissal: "",
@@ -201,6 +203,7 @@ function createSampleState() {
     headerImageX: 50,
     headerImageY: 50,
     headerImageOpacity: 35,
+    headerHeight: 230,
     participants: ja.sampleParticipants,
     meeting: ja.stationEast,
     dismissal: ja.station,
@@ -233,6 +236,7 @@ function loadState() {
     parsed.headerImageX = clampNumber(parsed.headerImageX, 0, 100, 50);
     parsed.headerImageY = clampNumber(parsed.headerImageY, 0, 100, 50);
     parsed.headerImageOpacity = clampNumber(parsed.headerImageOpacity, 0, 100, 35);
+    parsed.headerHeight = clampNumber(parsed.headerHeight, 160, 360, 230);
     parsed.packingVisible = parsed.packingVisible !== false;
     parsed.items = parsed.items.map(normalizeItem);
     parsed.metaVisible = normalizeMetaVisibility(parsed);
@@ -302,6 +306,7 @@ function normalizeSchedule(schedule) {
   normalized.headerImageX = clampNumber(normalized.headerImageX, 0, 100, 50);
   normalized.headerImageY = clampNumber(normalized.headerImageY, 0, 100, 50);
   normalized.headerImageOpacity = clampNumber(normalized.headerImageOpacity, 0, 100, 35);
+  normalized.headerHeight = clampNumber(normalized.headerHeight, 160, 360, 230);
   normalized.packingVisible = normalized.packingVisible !== false;
   normalized.items = Array.isArray(normalized.items) ? normalized.items.map(normalizeItem) : createBlankState().items;
   normalized.metaVisible = normalizeMetaVisibility(normalized);
@@ -314,6 +319,7 @@ function syncPanelControls() {
   if (headerImageX) headerImageX.value = clampNumber(state.headerImageX, 0, 100, 50);
   if (headerImageY) headerImageY.value = clampNumber(state.headerImageY, 0, 100, 50);
   if (headerImageOpacity) headerImageOpacity.value = clampNumber(state.headerImageOpacity, 0, 100, 35);
+  if (headerHeight) headerHeight.value = clampNumber(state.headerHeight, 160, 360, 230);
   renderSavedScheduleOptions();
 }
 
@@ -453,6 +459,7 @@ function applyHeaderImage() {
     hero.style.removeProperty("--hero-position");
   }
   hero.style.setProperty("--hero-opacity", String(clampNumber(state.headerImageOpacity, 0, 100, 35) / 100));
+  hero.style.setProperty("--hero-height", `${clampNumber(state.headerHeight, 160, 360, 230)}px`);
 }
 
 function renderMetaInput(label, field, value) {
@@ -1015,11 +1022,13 @@ async function drawTravelScheduleCanvas(type) {
   const items = state.items;
   const measure = document.createElement("canvas").getContext("2d");
   measure.font = `${16 * scale}px sans-serif`;
+  const exportHeroHeight = clampNumber(state.headerHeight, 160, 360, 230) * scale;
+  const headerDelta = exportHeroHeight - 230 * scale;
   const noteHeight = state.packingVisible !== false ? Math.max(180 * scale, textHeight(measure, state.packing || ja.unfilled, contentW - 56 * scale, 30 * scale) + 86 * scale) : 0;
   const memoHeight = state.notes ? Math.max(150 * scale, textHeight(measure, state.notes, contentW - 56 * scale, 30 * scale) + 86 * scale) : 0;
   const itemGap = 16 * scale;
   const itemHeights = items.map((item) => (hasVisibleDetails(item) ? 164 * scale : 84 * scale));
-  const timelineTop = 392 * scale;
+  const timelineTop = 392 * scale + headerDelta;
   const itemsHeight = itemHeights.reduce((sum, value) => sum + value, 0) + Math.max(0, items.length - 1) * itemGap;
   const height = Math.max(1547 * scale, timelineTop + 72 * scale + itemsHeight + noteHeight + memoHeight + 104 * scale);
 
@@ -1031,8 +1040,8 @@ async function drawTravelScheduleCanvas(type) {
   ctx.fillRect(0, 0, width, canvas.height);
 
   await drawTravelPageBackground(ctx, width, canvas.height);
-  await drawTravelExportHero(ctx, padding, 32 * scale, contentW, 230 * scale);
-  drawTravelExportMeta(ctx, padding, 312 * scale, contentW, scale);
+  await drawTravelExportHero(ctx, padding, 32 * scale, contentW, exportHeroHeight);
+  drawTravelExportMeta(ctx, padding, 312 * scale + headerDelta, contentW, scale);
 
   let y = timelineTop;
   ctx.fillStyle = colors.text;
@@ -1747,6 +1756,7 @@ headerImageResetButton.addEventListener("click", () => {
   state.headerImageX = 50;
   state.headerImageY = 50;
   state.headerImageOpacity = 35;
+  state.headerHeight = 230;
   headerImageInput.value = "";
   saveState();
   renderSheet();
@@ -1761,6 +1771,7 @@ headerImageInput.addEventListener("change", async () => {
     state.headerImageX = 50;
     state.headerImageY = 50;
     state.headerImageOpacity = 35;
+    state.headerHeight = 230;
     saveState();
     renderSheet();
     syncPanelControls();
@@ -1769,12 +1780,13 @@ headerImageInput.addEventListener("change", async () => {
     showStatus(ja.failed);
   }
 });
-[headerImageScale, headerImageX, headerImageY, headerImageOpacity].forEach((input) => {
+[headerImageScale, headerImageX, headerImageY, headerImageOpacity, headerHeight].forEach((input) => {
   input?.addEventListener("input", () => {
     state.headerImageScale = clampNumber(headerImageScale?.value, 60, 180, 100);
     state.headerImageX = clampNumber(headerImageX?.value, 0, 100, 50);
     state.headerImageY = clampNumber(headerImageY?.value, 0, 100, 50);
     state.headerImageOpacity = clampNumber(headerImageOpacity?.value, 0, 100, 35);
+    state.headerHeight = clampNumber(headerHeight?.value, 160, 360, 230);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     applyHeaderImage();
   });

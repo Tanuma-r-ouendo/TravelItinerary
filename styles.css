@@ -1483,10 +1483,10 @@ textarea:focus {
   border: 1px solid rgba(32, 117, 104, 0.13);
   border-radius: 16px;
   box-shadow: 0 2px 16px rgba(32, 117, 104, 0.07);
-  height: 230px;
+  height: var(--hero-height, 230px);
   left: 24px;
   margin: 0;
-  min-height: 230px;
+  min-height: var(--hero-height, 230px);
   overflow: hidden;
   padding: 40px 32px;
   position: absolute;
@@ -1524,7 +1524,7 @@ textarea:focus {
 .template-travel .sheet-hero .sheet-date-line::before {
   background: var(--hero-image, url("./assets/figma/hero-landscape.png")) center / cover no-repeat;
   content: "";
-  height: 228px;
+  height: var(--hero-height, 230px);
   left: -32px;
   opacity: var(--hero-opacity, 0.35);
   pointer-events: none;
